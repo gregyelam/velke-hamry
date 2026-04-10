@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Velké Hamry — Family Trip Planner</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "error-container": "#ffdad6",
+                        "primary-container": "#4f634f",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed": "#201b15",
+                        "inverse-surface": "#31312b",
+                        "tertiary-fixed": "#ffdbd0",
+                        "surface-container-highest": "#e5e2da",
+                        "secondary": "#655d56",
+                        "outline-variant": "#c3c8c0",
+                        "on-surface-variant": "#434842",
+                        "on-primary-fixed-variant": "#384b39",
+                        "on-secondary-fixed-variant": "#4d453f",
+                        "primary": "#384b38",
+                        "secondary-container": "#eaddd5",
+                        "primary-fixed": "#d2e9cf",
+                        "surface": "#fcf9f1",
+                        "tertiary-fixed-dim": "#ffb59c",
+                        "surface-bright": "#fcf9f1",
+                        "on-tertiary-fixed-variant": "#783116",
+                        "on-primary-fixed": "#0d1f10",
+                        "on-tertiary-container": "#ffcdbd",
+                        "on-surface": "#1c1c17",
+                        "surface-container": "#f1eee6",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#b6ccb4",
+                        "tertiary-container": "#96472b",
+                        "primary-fixed-dim": "#b6ccb4",
+                        "tertiary": "#783016",
+                        "on-secondary-container": "#69615a",
+                        "surface-container-high": "#ebe8e0",
+                        "secondary-fixed-dim": "#d0c4bc",
+                        "on-primary-container": "#c7dec5",
+                        "inverse-on-surface": "#f3f1e9",
+                        "outline": "#747871",
+                        "background": "#fcf9f1",
+                        "surface-tint": "#4f634f",
+                        "surface-variant": "#e5e2da",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#ece0d8",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f6f3eb",
+                        "on-tertiary-fixed": "#390c00",
+                        "on-background": "#1c1c17",
+                        "surface-dim": "#dcdad2",
+                        "error": "#ba1a1a"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed min-h-screen">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full z-50 bg-[#fcf9f1]/80 dark:bg-stone-900/80 backdrop-blur-xl">
+<div class="flex flex-col px-4 sm:px-6 py-3 sm:py-4 max-w-screen-xl mx-auto">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 sm:gap-3">
+<span class="material-symbols-outlined text-[#384b38] dark:text-emerald-500 text-2xl sm:text-3xl">park</span>
+<h1 class="text-[#384b38] dark:text-emerald-500 font-headline font-extrabold text-xl sm:text-2xl tracking-tight leading-tight">Velké Hamry — Kam vyrazit</h1>
+</div>
+<button class="material-symbols-outlined text-stone-500 hover:bg-[#f6f3eb] p-2 rounded-full transition-colors active:scale-95">settings</button>
+</div>
+<p class="text-on-surface-variant text-[11px] sm:text-sm mt-0.5 sm:mt-1 font-medium opacity-80">Weekend trip planner for family hikes in Jizerské hory</p>
+</div>
+</header>
+<main class="max-w-screen-xl mx-auto px-4 sm:px-6 pb-32">
+<!-- Condition Filter Bar -->
+<section class="py-4 sm:py-6 overflow-x-auto hide-scrollbar -mx-4 sm:-mx-6 px-4 sm:px-6">
+<div class="flex gap-2 sm:gap-3 min-w-max">
+<button class="bg-tertiary text-on-tertiary px-4 sm:px-5 py-2 sm:py-2.5 rounded-full flex items-center gap-2 text-xs sm:text-sm font-bold transition-transform active:scale-95">
+<span class="material-symbols-outlined text-[18px]">wb_sunny</span> Sunny
+                </button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 sm:px-5 py-2 sm:py-2.5 rounded-full flex items-center gap-2 text-xs sm:text-sm font-bold hover:bg-surface-container-highest transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[18px]">ac_unit</span> Cold/Winter
+                </button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 sm:px-5 py-2 sm:py-2.5 rounded-full flex items-center gap-2 text-xs sm:text-sm font-bold hover:bg-surface-container-highest transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[18px]">rainy</span> Rainy
+                </button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 sm:px-5 py-2 sm:py-2.5 rounded-full flex items-center gap-2 text-xs sm:text-sm font-bold hover:bg-surface-container-highest transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[18px]">air</span> Windy
+                </button>
+<button class="bg-surface-container-high text-on-surface-variant px-4 sm:px-5 py-2 sm:py-2.5 rounded-full flex items-center gap-2 text-xs sm:text-sm font-bold hover:bg-surface-container-highest transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[18px]">child_care</span> Stroller-friendly
+                </button>
+</div>
+</section>
+<!-- Bento Layout: Map + Quick Tips -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 mb-8 sm:mb-12">
+<!-- Map Concept -->
+<div class="lg:col-span-8 relative rounded-2xl sm:rounded-3xl overflow-hidden aspect-[1/1] sm:aspect-[4/3] lg:aspect-auto min-h-[300px] sm:min-h-[400px] shadow-[0px_12px_32px_rgba(28,28,23,0.06)] bg-surface-container-low group">
+<img alt="Top-down map view of Jizerske hory" class="w-full h-full object-cover opacity-90 grayscale-[20%] sepia-[10%]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkun0QnGf-7Pdcs4Wh5B01NNGijhOJ7XT26oTE68bU5Udp4vGxW0ji96lYc6AXM02jb40JZOP4gaMmMgAs83bj1h12RZia5M7B3vb7DRDXCs2lfsBy1nL0CK7tv9QA40xYSpe9IXNlugAZHC2cD5_RoJiGoS0sUaqWeRksNX6Rbli9tTrZmQVC-gj_F6ksJ_R4hqgu28nnrfKSCrgNdv1kYLMuMVDlwz-od7fRBO8rpOw61VfcO54jqEcWKTm1FPlcD5aGnYNR5HfC"/>
+<div class="absolute inset-0 p-4 sm:p-6 flex flex-col justify-between pointer-events-none">
+<div class="flex justify-between items-start">
+<div class="bg-surface-container-lowest/90 backdrop-blur px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-outline-variant/15 flex items-center gap-2 pointer-events-auto">
+<span class="material-symbols-outlined text-primary text-sm sm:text-base">location_on</span>
+<span class="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-on-surface">Jizerské hory</span>
+</div>
+</div>
+<!-- Map Markers -->
+<div class="absolute top-[45%] left-[55%] pointer-events-auto">
+<div class="relative group/pin cursor-pointer">
+<span class="material-symbols-outlined text-primary text-3xl sm:text-4xl" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-on-surface text-surface text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover/pin:opacity-100 transition-opacity whitespace-nowrap">Home (Velké Hamry)</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Tips Column -->
+<div class="lg:col-span-4 flex flex-col gap-4 sm:gap-6">
+<div class="bg-primary text-on-primary p-6 sm:p-8 rounded-2xl sm:rounded-3xl flex-1 flex flex-col justify-center relative overflow-hidden">
+<span class="material-symbols-outlined absolute -right-4 -bottom-4 text-7xl sm:text-9xl opacity-10">hiking</span>
+<h3 class="text-xl sm:text-2xl font-extrabold mb-4 sm:mb-6">Expert Family Tips</h3>
+<div class="grid grid-cols-2 gap-3 sm:gap-4">
+<div class="bg-primary-container/30 p-3 sm:p-4 rounded-xl sm:rounded-2xl flex flex-col gap-1 sm:gap-2">
+<span class="material-symbols-outlined text-primary-fixed text-sm sm:text-base">map</span>
+<p class="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider">Offline mapy</p>
+</div>
+<div class="bg-primary-container/30 p-3 sm:p-4 rounded-xl sm:rounded-2xl flex flex-col gap-1 sm:gap-2">
+<span class="material-symbols-outlined text-primary-fixed text-sm sm:text-base">restaurant</span>
+<p class="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider">Svačina</p>
+</div>
+<div class="bg-primary-container/30 p-3 sm:p-4 rounded-xl sm:rounded-2xl flex flex-col gap-1 sm:gap-2">
+<span class="material-symbols-outlined text-primary-fixed text-sm sm:text-base">backpack</span>
+<p class="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider">Krosna &gt; Kočár</p>
+</div>
+<div class="bg-primary-container/30 p-3 sm:p-4 rounded-xl sm:rounded-2xl flex flex-col gap-1 sm:gap-2">
+<span class="material-symbols-outlined text-primary-fixed text-sm sm:text-base">settings_backup_restore</span>
+<p class="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider">Otočit včas</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-5 sm:p-6 rounded-2xl sm:rounded-3xl">
+<h3 class="text-on-surface-variant text-[10px] sm:text-[11px] font-bold uppercase tracking-widest mb-3 sm:mb-4">Current Forecast</h3>
+<div class="flex items-center gap-3 sm:gap-4">
+<span class="material-symbols-outlined text-3xl sm:text-4xl text-tertiary">wb_sunny</span>
+<div>
+<p class="text-xl sm:text-2xl font-extrabold text-on-surface">22°C</p>
+<p class="text-xs sm:text-sm text-on-surface-variant">Perfect for the trail</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Trip Card Grid -->
+<h2 class="text-2xl sm:text-3xl font-extrabold text-[#384b38] mb-6 sm:mb-8 flex items-center gap-3">
+            Recommended Trips
+            <span class="h-px flex-1 bg-outline-variant/20"></span>
+</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+<!-- Card 1 -->
+<div class="group bg-surface-container-lowest rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0px_12px_32px_rgba(28,28,23,0.06)] border border-outline-variant/10 flex flex-col">
+<div class="relative h-48 sm:h-64 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsyiTgLYSUGMp5mpoTctsf0HB6nr4MY3lfC9OMBPyTWMLePsIrcf7uAHtr5m_nb0nqBWed4cFZLAZHX8OksFlqdDcZBovmACVzCk-FuYAGRD8rt8QPnPESpP_r8Lc1X1bmDZ6CFYvIbSHf4VO30ldzwWrKkWMrBPpu4lo02o4y37qQSjXvGROZe9AhmeF-h_7EE_QhxxEr05kDqaOn42IFMnsiIwBtT7A4pPnNVGt8sML4TrXABwMB7YyW0nsFmrw4-ZBXAr-c9N3v"/>
+<div class="absolute top-3 left-3 sm:top-4 sm:left-4 flex gap-1.5 sm:gap-2">
+<span class="bg-tertiary text-on-tertiary text-[9px] sm:text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full shadow-lg">⭐ Best Pick</span>
+<span class="bg-surface-container-lowest/90 backdrop-blur text-primary text-[9px] sm:text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full">Moderate</span>
+</div>
+</div>
+<div class="p-6 sm:p-8 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-3 sm:mb-4">
+<h3 class="text-xl sm:text-2xl font-extrabold text-on-surface leading-tight">Protržená přehrada</h3>
+<div class="flex items-center text-primary font-bold text-xs sm:text-sm">
+<span class="material-symbols-outlined mr-1 text-sm sm:text-base">directions_walk</span> 4-6km
+                        </div>
+</div>
+<div class="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-6">
+<span class="bg-surface-container text-on-surface-variant text-[10px] sm:text-[11px] font-medium px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">Start: Desná</span>
+<span class="bg-error-container text-on-error-container text-[10px] sm:text-[11px] font-medium px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">Stroller: ❌</span>
+<span class="bg-primary-fixed text-on-primary-fixed-variant text-[10px] sm:text-[11px] font-medium px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">☀️ Best in Sun</span>
+</div>
+<div class="bg-surface-container-low p-4 sm:p-5 rounded-xl sm:rounded-2xl mb-6 sm:mb-8 flex-1">
+<p class="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-on-surface-variant mb-1.5 sm:mb-2">Kids Guide</p>
+<p class="text-xs sm:text-sm leading-relaxed text-on-surface-variant">5yo can handle the full walk. Bring a carrier for the 2yo. Historic dam ruins are great for storytelling.</p>
+</div>
+<a class="w-full bg-primary text-on-primary py-3 sm:py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-sm sm:text-base">map</span> View on Mapy.cz
+                    </a>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group bg-surface-container-lowest rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0px_12px_32px_rgba(28,28,23,0.06)] border border-outline-variant/10 flex flex-col">
+<div class="relative h-48 sm:h-64 overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbj4g5cy7jJVwMdfaY1-ZOB-fZRLHIbw1Z4tyjCGKcjfWDK4_-2ReY3iC-0t94N7_gwkaT4BioLQ_1vD8bbjEe-daBObjz8PoYEEBvbcSSNt4uWDkkbhIPBdYAvk1c3jB1Vift_JaPEU3B_j5u86PWzjOCG4I5KwlivGTrAFNb113WDdxBk_CedmteHvuktwvTtA8Gs-wTBBwRD8TQxO8hBcPyLs9wJMCsyNcmEcS6gIZ0qn_0vO_5KIyCKuH8b3k7BgYdBIC1P6PH"/>
+<div class="absolute top-3 left-3 sm:top-4 sm:left-4">
+<span class="bg-surface-container-lowest/90 backdrop-blur text-emerald-700 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full">Easy</span>
+</div>
+</div>
+<div class="p-6 sm:p-8 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-3 sm:mb-4">
+<h3 class="text-xl sm:text-2xl font-extrabold text-on-surface leading-tight">Jizerka (rašeliniště)</h3>
+<div class="flex items-center text-primary font-bold text-xs sm:text-sm">
+<span class="material-symbols-outlined mr-1 text-sm sm:text-base">directions_walk</span> 3-5km
+                        </div>
+</div>
+<div class="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-6">
+<span class="bg-surface-container text-on-surface-variant text-[10px] sm:text-[11px] font-medium px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">Start: Jizerka village</span>
+<span class="bg-secondary-container text-on-secondary-container text-[10px] sm:text-[11px] font-medium px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">Stroller: ⚠️</span>
+<span class="bg-primary-fixed text-on-primary-fixed-variant text-[10px] sm:text-[11px] font-medium px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">☀️ Best in Sun</span>
+</div>
+<div class="bg-surface-container-low p-4 sm:p-5 rounded-xl sm:rounded-2xl mb-6 sm:mb-8 flex-1">
+<p class="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-on-surface-variant mb-1.5 sm:mb-2">Kids Guide</p>
+<p class="text-xs sm:text-sm leading-relaxed text-on-surface-variant">Zero-stress terrain. High chance of water play near the stream. Can be very windy, always bring extra layers.</p>
+</div>
+<a class="w-full bg-primary text-on-primary py-3 sm:py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-sm sm:text-base">map</span> View on Mapy.cz
+                    </a>
+</div>
+</div>
+</div>
+<!-- Weekend Planner -->
+<section class="mt-12 sm:mt-20">
+<h2 class="text-2xl sm:text-3xl font-extrabold text-[#384b38] mb-6 sm:mb-8 flex items-center gap-3">
+                Weekend Timeline
+                <span class="h-px flex-1 bg-outline-variant/20"></span>
+</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+<!-- Friday -->
+<div class="bg-surface-container-low p-6 rounded-2xl sm:rounded-3xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="text-3xl sm:text-4xl font-black">FRI</span>
+</div>
+<p class="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest text-tertiary mb-1">Friday Arrival</p>
+<h4 class="text-lg sm:text-xl font-extrabold text-on-surface mb-3 sm:mb-4">Protržená přehrada</h4>
+<p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">The "must-do" hike for your arrival. Evening light at the dam is spectacular for photos.</p>
+<div class="mt-4 flex gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-outline-variant/30"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-outline-variant/30"></span>
+</div>
+</div>
+<!-- Saturday -->
+<div class="bg-surface-container-low p-6 rounded-2xl sm:rounded-3xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="text-3xl sm:text-4xl font-black">SAT</span>
+</div>
+<p class="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest text-tertiary mb-1">City Adventure</p>
+<h4 class="text-lg sm:text-xl font-extrabold text-on-surface mb-3 sm:mb-4">Ještěd / Liberec</h4>
+<p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Cable car up for the views, then downhill into Liberec for a reward lunch. Perfect for windy days.</p>
+<div class="mt-4 flex gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-outline-variant/30"></span>
+</div>
+</div>
+<!-- Sunday -->
+<div class="bg-surface-container-low p-6 rounded-2xl sm:rounded-3xl relative overflow-hidden group border-2 border-primary/10">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="text-3xl sm:text-4xl font-black">SUN</span>
+</div>
+<p class="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest text-tertiary mb-1">Choice of Finish</p>
+<h4 class="text-lg sm:text-xl font-extrabold text-on-surface mb-3 sm:mb-4">Jizerka OR Štěpánka</h4>
+<p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Depending on energy levels: Easy stroll at Jizerka or a final climb to Štěpánka lookout tower.</p>
+<div class="mt-4 flex gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full flex justify-around items-center px-4 pb-5 pt-3 z-50 bg-[#fcf9f1]/90 dark:bg-stone-900/90 backdrop-blur-2xl shadow-[0px_-12px_32px_rgba(28,28,23,0.06)] rounded-t-2xl border-t border-[#c3c8c0]/15">
+<a class="flex flex-col items-center justify-center bg-[#e5e2da] dark:bg-stone-800 text-[#384b38] dark:text-emerald-400 rounded-xl px-4 py-1.5 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined text-xl sm:text-2xl" style="font-variation-settings: 'FILL' 1;">map</span>
+<span class="font-label font-medium text-[9px] sm:text-[11px] uppercase tracking-widest mt-0.5">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 px-4 py-1.5 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined text-xl sm:text-2xl">explore</span>
+<span class="font-label font-medium text-[9px] sm:text-[11px] uppercase tracking-widest mt-0.5">Trips</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 px-4 py-1.5 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined text-xl sm:text-2xl">calendar_today</span>
+<span class="font-label font-medium text-[9px] sm:text-[11px] uppercase tracking-widest mt-0.5">Planner</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 px-4 py-1.5 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined text-xl sm:text-2xl">lightbulb</span>
+<span class="font-label font-medium text-[9px] sm:text-[11px] uppercase tracking-widest mt-0.5">Tips</span>
+</a>
+</nav>
+</body></html>

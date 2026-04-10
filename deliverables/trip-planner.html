@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velké Hamry — Kam vyrazit</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: #f5f3f0; color: #2c2c2c; line-height: 1.5;
+        }
+        /* Mobile-first base */
+        header {
+            background: #fff; border-bottom: 1px solid #e0ddd8;
+            padding: 16px 16px; position: sticky; top: 0; z-index: 1000;
+        }
+        header h1 { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; }
+        header p { color: #7a756d; font-size: 12px; margin-top: 2px; }
+
+        /* Filter bar */
+        .filter-bar {
+            background: #fff; border-bottom: 1px solid #e0ddd8;
+            padding: 10px 16px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+        }
+        .filter-label {
+            font-size: 11px; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.5px; color: #7a756d; margin-right: 2px; width: 100%;
+        }
+        .filter-pill {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 8px 12px; border-radius: 20px; font-size: 13px; font-weight: 500;
+            border: 1px solid #e0ddd8; background: #fff; color: #5a5650;
+            cursor: pointer; transition: all 0.2s; user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .filter-pill:hover { border-color: #b0aaa0; }
+        .filter-pill.active { background: #3a6b3a; color: #fff; border-color: #3a6b3a; }
+        .filter-pill.active.warn { background: #b05a3a; border-color: #b05a3a; }
+
+        .content { max-width: 1100px; margin: 0 auto; padding: 16px; }
+
+        /* Map */
+        .map-container {
+            background: #fff; border-radius: 12px;
+            overflow: hidden; border: 1px solid #e0ddd8; height: 240px;
+            margin-bottom: 16px;
+        }
+        .map-container .map { height: 100%; width: 100%; }
+
+        /* Trip cards */
+        .cards-grid {
+            display: grid; grid-template-columns: 1fr;
+            gap: 16px; margin-bottom: 24px;
+        }
+        .trip-card {
+            background: #fff; border-radius: 12px; border: 1px solid #e0ddd8;
+            padding: 18px; transition: all 0.3s; position: relative;
+        }
+        .trip-card:hover { border-color: #3a6b3a; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .trip-card.highlighted { border-color: #3a6b3a; box-shadow: 0 0 0 2px #3a6b3a; }
+        .trip-card.dimmed { opacity: 0.35; }
+        .trip-card .card-num {
+            position: absolute; top: 14px; right: 14px;
+            width: 28px; height: 28px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700; color: #fff;
+        }
+        .card-num.easy { background: #3a6b3a; }
+        .card-num.moderate { background: #c49a3c; }
+        .card-num.very-easy { background: #5a9a6a; }
+
+        .trip-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 2px; padding-right: 36px; }
+        .trip-card .best-pick {
+            display: inline-block; font-size: 10px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            padding: 2px 8px; border-radius: 3px;
+            background: #fef3e0; color: #9a6a2a; margin-left: 8px; vertical-align: middle;
+        }
+        .trip-card .subtitle { font-size: 13px; color: #7a756d; margin-bottom: 14px; }
+
+        .meta-row {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+            margin-bottom: 14px;
+        }
+        .meta-item { font-size: 12px; }
+        .meta-item .label {
+            color: #7a756d; font-size: 10px; text-transform: uppercase;
+            letter-spacing: 0.5px; margin-bottom: 1px;
+        }
+        .meta-item .value { font-weight: 600; font-size: 13px; }
+
+        .weather-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+        .wtag {
+            font-size: 11px; padding: 3px 8px; border-radius: 4px; font-weight: 500;
+        }
+        .wtag.good { background: #e8f0e8; color: #3a6b3a; }
+        .wtag.bad { background: #fde8e0; color: #b05a3a; }
+        .wtag.stroller-yes { background: #e8f0e8; color: #3a6b3a; }
+        .wtag.stroller-no { background: #f0eeeb; color: #7a756d; }
+        .wtag.stroller-partial { background: #fef3e0; color: #9a6a2a; }
+
+        .trip-card .description {
+            font-size: 13px; color: #5a5650; margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        .trip-card .kids-note {
+            font-size: 13px; color: #5a5650; padding: 10px 12px;
+            background: #faf9f7; border-radius: 8px;
+            border-left: 3px solid #3a6b3a; margin-bottom: 14px;
+        }
+        .trip-card .kids-note strong { color: #2c2c2c; }
+
+        .trip-card .map-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 14px; font-weight: 500; color: #fff;
+            text-decoration: none; padding: 10px 16px;
+            background: #3a6b3a; border: 1px solid #3a6b3a; border-radius: 8px;
+            transition: all 0.2s; width: 100%; justify-content: center;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .trip-card .map-link:hover { background: #2d5a2d; }
+
+        /* Weekend planner */
+        .section-title {
+            font-size: 16px; font-weight: 600; margin-bottom: 12px;
+            color: #2c2c2c;
+        }
+        .weekend-grid {
+            display: grid; grid-template-columns: 1fr;
+            gap: 10px; margin-bottom: 24px;
+        }
+        .day-card {
+            background: #fff; border-radius: 12px; border: 1px solid #e0ddd8;
+            padding: 16px; text-align: center;
+        }
+        .day-card .day-label {
+            font-size: 11px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.5px; color: #7a756d; margin-bottom: 4px;
+        }
+        .day-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+        .day-card p { font-size: 13px; color: #7a756d; }
+        .day-card .or { font-size: 12px; color: #b0aaa0; margin: 2px 0; }
+
+        /* Tips */
+        .tips-grid {
+            display: grid; grid-template-columns: 1fr;
+            gap: 10px; margin-bottom: 24px;
+        }
+        .tip-card {
+            background: #fff; border-radius: 10px; border: 1px solid #e0ddd8;
+            padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start;
+        }
+        .tip-icon {
+            width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; background: #f0eeeb;
+        }
+        .tip-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+        .tip-card p { font-size: 13px; color: #5a5650; }
+
+        /* Footer */
+        .footer {
+            text-align: center; padding: 20px 16px; font-size: 12px; color: #b0aaa0;
+        }
+
+        /* Desktop overrides */
+        @media (min-width: 768px) {
+            header { padding: 24px 32px; }
+            header h1 { font-size: 22px; }
+            header p { font-size: 14px; }
+            .filter-bar { padding: 12px 32px; }
+            .filter-label { width: auto; }
+            .content { padding: 24px 32px; }
+            .map-container { height: 360px; }
+            .cards-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+            .trip-card { padding: 24px; }
+            .trip-card h3 { font-size: 18px; }
+            .meta-row { grid-template-columns: 1fr 1fr 1fr; }
+            .trip-card .map-link { width: auto; }
+            .weekend-grid { grid-template-columns: 1fr 1fr 1fr; }
+            .tips-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Velké Hamry — Kam vyrazit</h1>
+        <p>Weekend trip planner · Family hikes in Jizerské hory · 2 adults + kids (5 & 2)</p>
+    </header>
+
+    <div class="filter-bar">
+        <span class="filter-label">Conditions:</span>
+        <div class="filter-pill" data-filter="sunny" onclick="toggleFilter(this)">☀️ Sunny</div>
+        <div class="filter-pill" data-filter="cold" onclick="toggleFilter(this)">❄️ Cold</div>
+        <div class="filter-pill" data-filter="rainy" onclick="toggleFilter(this)">🌧️ Rainy</div>
+        <div class="filter-pill" data-filter="windy" onclick="toggleFilter(this)">💨 Windy</div>
+        <div class="filter-pill" data-filter="stroller" onclick="toggleFilter(this)">👶 Stroller</div>
+    </div>
+
+    <div class="content">
+        <div class="map-container"><div id="map" class="map"></div></div>
+
+        <div class="cards-grid">
+
+            <!-- Card 1: Protržená přehrada -->
+            <div class="trip-card" id="card-1"
+                 data-good="sunny"
+                 data-bad="rainy"
+                 data-stroller="no"
+                 data-lat="50.7833" data-lng="15.3167">
+                <div class="card-num easy">1</div>
+                <h3>Protržená přehrada <span class="best-pick">⭐ Best pick</span></h3>
+                <div class="subtitle">Desná → dam ruins along Bílá Desná river</div>
+                <div class="meta-row">
+                    <div class="meta-item"><div class="label">Distance</div><div class="value">4–6 km</div></div>
+                    <div class="meta-item"><div class="label">Difficulty</div><div class="value">Easy–moderate</div></div>
+                    <div class="meta-item"><div class="label">Stroller</div><div class="value">❌ No</div></div>
+                </div>
+                <div class="weather-tags">
+                    <span class="wtag good">☀️ Best in sunshine</span>
+                    <span class="wtag bad">🌧️ Muddy when wet</span>
+                    <span class="wtag stroller-no">🎒 Carrier needed</span>
+                </div>
+                <div class="description">
+                    Forest trail along the Bílá Desná river to the historical dam ruins. Educational panels, wooden bridges, water features. Short segments perfect for stopping and exploring.
+                </div>
+                <div class="kids-note">
+                    <strong>With kids:</strong> Best ratio of adventure to effort. 5yo walks most of it, 2yo in carrier for steeper parts. Built-in "wow" moments keep them going.
+                </div>
+                <a href="https://mapy.cz/s/pusenudode" target="_blank" class="map-link">📍 Open in Mapy.cz</a>
+            </div>
+
+            <!-- Card 2: Jizerka -->
+            <div class="trip-card" id="card-2"
+                 data-good="sunny"
+                 data-bad="windy,cold"
+                 data-stroller="partial"
+                 data-lat="50.8333" data-lng="15.3500">
+                <div class="card-num easy">2</div>
+                <h3>Jizerka</h3>
+                <div class="subtitle">Peat bogs, boardwalks & Safírový potok</div>
+                <div class="meta-row">
+                    <div class="meta-item"><div class="label">Distance</div><div class="value">3–5 km</div></div>
+                    <div class="meta-item"><div class="label">Difficulty</div><div class="value">Easy</div></div>
+                    <div class="meta-item"><div class="label">Stroller</div><div class="value">⚠️ Partial</div></div>
+                </div>
+                <div class="weather-tags">
+                    <span class="wtag good">☀️ Best on calm day</span>
+                    <span class="wtag bad">💨 Exposed, no shelter</span>
+                    <span class="wtag bad">❄️ No cover from cold</span>
+                    <span class="wtag stroller-partial">👶 Boardwalks OK, trails no</span>
+                </div>
+                <div class="description">
+                    Open peat bog landscape with wooden boardwalks. Safírový potok (Sapphire Creek) — rocks and water for kids to play with. Wide-open views of the Jizera Mountains.
+                </div>
+                <div class="kids-note">
+                    <strong>With kids:</strong> Zero-stress option. No real elevation. Bring extra layers — more exposed than it looks from the parking.
+                </div>
+                <a href="https://mapy.cz/s/caronamego" target="_blank" class="map-link">📍 Open in Mapy.cz</a>
+            </div>
+
+            <!-- Card 3: Štěpánka -->
+            <div class="trip-card" id="card-3"
+                 data-good="sunny"
+                 data-bad="rainy,windy"
+                 data-stroller="no"
+                 data-lat="50.7667" data-lng="15.4000">
+                <div class="card-num moderate">3</div>
+                <h3>Rozhledna Štěpánka</h3>
+                <div class="subtitle">Forest climb with a tower reward at the top</div>
+                <div class="meta-row">
+                    <div class="meta-item"><div class="label">Distance</div><div class="value">4–6 km</div></div>
+                    <div class="meta-item"><div class="label">Difficulty</div><div class="value">Moderate</div></div>
+                    <div class="meta-item"><div class="label">Stroller</div><div class="value">❌ No</div></div>
+                </div>
+                <div class="weather-tags">
+                    <span class="wtag good">☀️ Clear sky for views</span>
+                    <span class="wtag bad">🌧️ Slippery climb</span>
+                    <span class="wtag bad">💨 Exposed tower top</span>
+                    <span class="wtag stroller-no">🎒 Carrier needed</span>
+                </div>
+                <div class="description">
+                    Forest paths with a short steep section leading to a stone lookout tower. Panoramic views of Jizerské hory and Krkonoše on clear days.
+                </div>
+                <div class="kids-note">
+                    <strong>With kids:</strong> Built-in motivation — "we're climbing the tower!" Expect to carry the 2yo for the uphill. The tower itself is the payoff.
+                </div>
+                <a href="https://mapy.cz/s/falehovoje" target="_blank" class="map-link">📍 Open in Mapy.cz</a>
+            </div>
+
+            <!-- Card 4: Přehrada Souš -->
+            <div class="trip-card" id="card-4"
+                 data-good="sunny,rainy,cold"
+                 data-bad="windy"
+                 data-stroller="yes"
+                 data-lat="50.7900" data-lng="15.3300">
+                <div class="card-num very-easy">4</div>
+                <h3>Přehrada Souš</h3>
+                <div class="subtitle">Flat paved road around a reservoir — stroller paradise</div>
+                <div class="meta-row">
+                    <div class="meta-item"><div class="label">Distance</div><div class="value">2–4 km</div></div>
+                    <div class="meta-item"><div class="label">Difficulty</div><div class="value">Very easy</div></div>
+                    <div class="meta-item"><div class="label">Stroller</div><div class="value">✅ Yes</div></div>
+                </div>
+                <div class="weather-tags">
+                    <span class="wtag good">🌧️ Paved, works in rain</span>
+                    <span class="wtag good">❄️ Works in cold</span>
+                    <span class="wtag bad">💨 Open water, windy</span>
+                    <span class="wtag stroller-yes">👶 Fully stroller-friendly</span>
+                </div>
+                <div class="description">
+                    Wide asphalt road around a reservoir. Used by cyclists and inline skaters — surface is smooth and flat throughout. Flexible length — just turn around when you want.
+                </div>
+                <div class="kids-note">
+                    <strong>With kids:</strong> The stroller-safe fallback. Bring a balance bike for the 5yo. More of a calm walk than an adventure — perfect for tired days or bad weather.
+                </div>
+                <a href="https://mapy.cz/s/bevanogare" target="_blank" class="map-link">📍 Open in Mapy.cz</a>
+            </div>
+
+        </div>
+
+        <!-- Weekend planner -->
+        <h2 class="section-title">Suggested Weekend</h2>
+        <div class="weekend-grid">
+            <div class="day-card">
+                <div class="day-label">Pátek / Friday</div>
+                <h4>Protržená přehrada</h4>
+                <p>Must-do, best trail. Arrive, settle in, then hike.</p>
+            </div>
+            <div class="day-card">
+                <div class="day-label">Sobota / Saturday</div>
+                <h4>Liberec / Ještěd</h4>
+                <p>Change of pace — city + cable car. Indoor backup if weather turns.</p>
+            </div>
+            <div class="day-card">
+                <div class="day-label">Neděle / Sunday</div>
+                <h4>Jizerka</h4>
+                <div class="or">— or —</div>
+                <h4>Štěpánka</h4>
+                <p>Easy if tired, active if energized. Pick based on energy.</p>
+            </div>
+        </div>
+
+        <!-- Tips -->
+        <h2 class="section-title">Quick Tips</h2>
+        <div class="tips-grid">
+            <div class="tip-card">
+                <div class="tip-icon">📱</div>
+                <div>
+                    <h4>Offline mapy</h4>
+                    <p>Download Mapy.cz offline maps. Signal is unreliable in the mountains — don't count on it.</p>
+                </div>
+            </div>
+            <div class="tip-card">
+                <div class="tip-icon">🥪</div>
+                <div>
+                    <h4>Svačina je must</h4>
+                    <p>Pack food and water. There's nothing on the trails — no kiosks, no restaurants mid-route.</p>
+                </div>
+            </div>
+            <div class="tip-card">
+                <div class="tip-icon">🎒</div>
+                <div>
+                    <h4>Krosna > kočár</h4>
+                    <p>Child carrier beats stroller on 80% of trails. Only Souš is truly stroller-safe.</p>
+                </div>
+            </div>
+            <div class="tip-card">
+                <div class="tip-icon">🔄</div>
+                <div>
+                    <h4>Otočit se včas</h4>
+                    <p>Turn back early = win. Don't push to finish at all costs — especially with little ones.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">Velké Hamry Trip Planner · Built for weekend adventures with kids</div>
+    </div>
+
+    <script>
+        // ── Map ──
+        const map = L.map('map').setView([50.7950, 15.3400], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // Home pin
+        const homeIcon = L.divIcon({
+            html: '<div style="background:#2c2c2c;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);">🏠</div>',
+            className: '', iconSize: [28, 28], iconAnchor: [14, 14]
+        });
+        L.marker([50.7167, 15.3167], { icon: homeIcon })
+            .addTo(map).bindPopup('<strong>Velké Hamry</strong><br>Home base');
+
+        // Trail markers
+        const trails = [
+            { id: 'card-1', name: 'Protržená přehrada', lat: 50.7833, lng: 15.3167, color: '#3a6b3a', num: '1' },
+            { id: 'card-2', name: 'Jizerka', lat: 50.8333, lng: 15.3500, color: '#3a6b3a', num: '2' },
+            { id: 'card-3', name: 'Štěpánka', lat: 50.7667, lng: 15.4000, color: '#c49a3c', num: '3' },
+            { id: 'card-4', name: 'Přehrada Souš', lat: 50.7900, lng: 15.3300, color: '#5a9a6a', num: '4' }
+        ];
+
+        trails.forEach(t => {
+            const icon = L.divIcon({
+                html: `<div style="background:${t.color};color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);">${t.num}</div>`,
+                className: '', iconSize: [28, 28], iconAnchor: [14, 14]
+            });
+            L.marker([t.lat, t.lng], { icon })
+                .addTo(map)
+                .bindPopup(`<strong>${t.name}</strong>`)
+                .on('click', () => {
+                    const card = document.getElementById(t.id);
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    card.classList.add('highlighted');
+                    setTimeout(() => card.classList.remove('highlighted'), 2000);
+                });
+        });
+
+        // ── Filter logic ──
+        const activeFilters = new Set();
+
+        function toggleFilter(el) {
+            const filter = el.dataset.filter;
+            if (activeFilters.has(filter)) {
+                activeFilters.delete(filter);
+                el.classList.remove('active');
+            } else {
+                activeFilters.add(filter);
+                el.classList.add('active');
+            }
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const cards = document.querySelectorAll('.trip-card');
+
+            if (activeFilters.size === 0) {
+                cards.forEach(c => { c.classList.remove('dimmed'); c.classList.remove('highlighted'); });
+                return;
+            }
+
+            cards.forEach(card => {
+                const good = (card.dataset.good || '').split(',');
+                const bad = (card.dataset.bad || '').split(',');
+                const stroller = card.dataset.stroller;
+
+                let score = 0;
+                let penalty = false;
+
+                activeFilters.forEach(f => {
+                    if (f === 'stroller') {
+                        if (stroller === 'yes') score += 2;
+                        else if (stroller === 'partial') score += 1;
+                        else penalty = true;
+                    } else if (good.includes(f)) {
+                        score += 2;
+                    } else if (bad.includes(f)) {
+                        penalty = true;
+                    }
+                });
+
+                if (penalty && score === 0) {
+                    card.classList.add('dimmed');
+                    card.classList.remove('highlighted');
+                } else if (score > 0 && !penalty) {
+                    card.classList.remove('dimmed');
+                    card.classList.add('highlighted');
+                    setTimeout(() => card.classList.remove('highlighted'), 300);
+                } else {
+                    card.classList.remove('dimmed');
+                    card.classList.remove('highlighted');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
