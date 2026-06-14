@@ -10,8 +10,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{margin:0;background:#F1EEE7;color:#23221F;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;}
+  html{scroll-behavior:smooth;overflow-x:clip;}
+  body{margin:0;background:#F1EEE7;color:#23221F;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:clip;max-width:100%;}
   img{display:block;max-width:100%;}
   input,select,textarea,button{font-family:inherit;}
   ::selection{background:#BF562E;color:#F1EEE7;}
@@ -31,6 +31,7 @@
   @media(min-width:940px){#navlinks{display:flex!important;} #burger{display:none!important;}}
   #mobilemenu{display:none;}
   #mobilemenu.open{display:flex!important;}
+  @media(max-width:480px){.hero-coords{display:none;}}
 </style>
 </head>
 <body>
@@ -66,7 +67,7 @@ const DICT = {
     around:{ eyebrow:'Okolí · Around', h2:'Jizerky a Krkonoše na dosah.', cards:[ {t:'Protržená přehrada', d:'Lesní stezka podél Bílé Desné k ruinám protržené přehrady. Klidná, atmosférická, ideální dopoledne.'}, {t:'Vodopády', d:'Mumlavské vodopády a kaskády Jizery - krátké výlety za vodou a tichem.'}, {t:'Rozhledna Štěpánka', d:'Kamenná rozhledna nad lesy, panorama Jizerek i Krkonoš. Nejlepší za jasného večera.'}, {t:'Jizerka', d:'Horská osada a rašeliniště s dřevěnými chodníky. Pomalá procházka, safírový potok.'}, {t:'Kavárny a restaurace', d:'Tipy na dobrou kávu a večeři v okolí - rádi poradíme osobně.'}, {t:'Pomalé večery', d:'Vlastní terasa, ohniště pod hvězdami a klid, který jinde nenajdete.'} ] },
     avail:{ eyebrow:'Dostupnost a ceny · Availability & prices', h2:'Volné termíny v reálném čase.', perex:'Živý kalendář dostupnosti a cen přímo z rezervačního systému. Pro nejlepší cenu pošlete poptávku níže - vyřídíme ji napřímo.', caption:'Kalendář zobrazuje živá data pro tento apartmán.' },
     booking:{ eyebrow:'Rezervace · Book direct', h2:'Rezervujte napřímo.', benefits:[ {t:'Nejlepší cena.', d:'Bez prostředníka, bez příplatků portálů.'}, {t:'Přímý kontakt.', d:'Rezervaci vyřídíme my, ne anonymní portál.'}, {t:'Flexibilita.', d:'Domluvíme příjezd, tipy na okolí i speciální přání.'} ], f:{ arrival:'Příjezd', departure:'Odjezd', guests:'Počet hostů', name:'Jméno', email:'E-mail', phone:'Telefon (nepovinné)', note:'Poznámka (nepovinné)', submit:'Odeslat poptávku', sending:'Odesílám...' }, guestOpts:[ {v:'1',l:'1 host'}, {v:'2',l:'2 hosté'}, {v:'3',l:'3 hosté'} ], micro:'Odesláním nás kontaktujete napřímo. Žádná platba teď.', secondary:'Chcete rezervovat hned? Otevřít rezervační systém →', successTitle:'Díky!', successBody:'Ozveme se co nejdřív.', errorTitle:'Něco se nepovedlo.', errorBody:'Zkuste to prosím znovu, nebo nám napište na Instagram.' },
-    about:{ eyebrow:'O nás · About us', h2:'Dva kamarádi, jedno místo.', intro:'Jsme dva kamarádi. INGOT jsme si postavili pro sebe - na volné dny, klid a čas s blízkými. Spojují nás běžky, kolo a hory; tady to máme všechno za dveřmi. A protože sami hodně cestujeme, rádi tohle místo otevřeme i vám.', o1name:'Martin Smékal', o1role:'Filmový režisér', o1line:'Filmař s citem pro světlo, atmosféru a detail - a ten je v INGOTu znát.', o2name:'Martin Gregor', o2role:'Product Owner · design', o2line:'Roky v kreativních agenturách. Od něj je důraz na design a každý detail apartmánu.' },
+    about:{ eyebrow:'O nás · About us', h2:'Dva kamarádi, jedno místo.', intro:'Jsme dva kamarádi. INGOT jsme si postavili pro sebe - na volné dny, klid a čas s blízkými. Spojují nás běžky, kolo a hory; tady to máme všechno za dveřmi. A protože sami hodně cestujeme, rádi tohle místo otevřeme i vám.', o1name:'Martin Smékal', o1role:'Filmový režisér', o1line:'', o2name:'Martin Gregor', o2role:'Staví digitální produkty', o2line:'' },
     footer:{ tagline:'Inspirováno Severem. Ukováno v Jizerkách.', location:'Velké Hamry, Jizerské hory', rights:'Rezervujete přímo u nás, bez prostředníka. © 2026 INGOT', insta:'@ingot_hamry' },
   },
   en: {
@@ -79,7 +80,7 @@ const DICT = {
     around:{ eyebrow:'Around · Okolí', h2:'The Jizera and Giant Mountains, within reach.', cards:[ {t:'The burst dam', d:'A forest trail along the Bílá Desná to the ruins of the burst dam. Calm, atmospheric, a perfect morning.'}, {t:'Waterfalls', d:'The Mumlava waterfalls and the Jizera cascades - short walks to water and quiet.'}, {t:'Štěpánka lookout', d:'A stone lookout tower above the forests, panoramas of both ranges. Best on a clear evening.'}, {t:'Jizerka', d:'A mountain hamlet and peat bog with wooden boardwalks. A slow walk, a sapphire creek.'}, {t:'Cafés & dining', d:'Where to find good coffee and dinner nearby - we are happy to point the way.'}, {t:'Slow evenings', d:"Your own terrace, a fire pit under the stars and a quiet you won't find elsewhere."} ] },
     avail:{ eyebrow:'Availability & prices · Dostupnost', h2:'Live availability.', perex:'A live availability and price calendar straight from the booking system. For the best price, send an enquiry below - we handle it directly.', caption:'Live data for this apartment.' },
     booking:{ eyebrow:'Book direct · Rezervace', h2:'Book direct.', benefits:[ {t:'Best price.', d:'No middleman, no platform fees.'}, {t:'Direct contact.', d:'We handle your booking, not an anonymous portal.'}, {t:'Flexibility.', d:"We'll arrange arrival, local tips and special requests."} ], f:{ arrival:'Arrival', departure:'Departure', guests:'Guests', name:'Name', email:'E-mail', phone:'Phone (optional)', note:'Note (optional)', submit:'Send enquiry', sending:'Sending...' }, guestOpts:[ {v:'1',l:'1 guest'}, {v:'2',l:'2 guests'}, {v:'3',l:'3 guests'} ], micro:'This sends us a direct enquiry. No payment now.', secondary:'Prefer to book instantly? Open the booking system →', successTitle:'Thank you!', successBody:"We'll be in touch shortly.", errorTitle:'Something went wrong.', errorBody:'Please try again, or message us on Instagram.' },
-    about:{ eyebrow:'About us · O nás', h2:'Two friends, one place.', intro:"We're two friends. We built INGOT for ourselves - for days off, quiet and time with the people we love. Cross-country skiing, cycling and the mountains are our shared thing, and here it's all right outside the door. And because we travel a lot ourselves, we're glad to open this place up to you too.", o1name:'Martin Smékal', o1role:'Film Director', o1line:'A filmmaker with an eye for light, atmosphere and detail - and you can feel it throughout INGOT.', o2name:'Martin Gregor', o2role:'Product Owner · design', o2line:'Years in creative agencies. The design sensibility and the attention to every detail come from him.' },
+    about:{ eyebrow:'About us · O nás', h2:'Two friends, one place.', intro:"We're two friends. We built INGOT for ourselves - for days off, quiet and time with the people we love. Cross-country skiing, cycling and the mountains are our shared thing, and here it's all right outside the door. And because we travel a lot ourselves, we're glad to open this place up to you too.", o1name:'Martin Smékal', o1role:'Film Director', o1line:'', o2name:'Martin Gregor', o2role:'Builds digital products', o2line:'' },
     footer:{ tagline:'Inspired by the North. Forged in the Jizera Mountains.', location:'Velké Hamry, Jizera Mountains', rights:'Book directly with us, no middleman. © 2026 INGOT', insta:'@ingot_hamry' },
   }
 };
@@ -147,7 +148,7 @@ function render(){
         <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
           <span style="${SS};font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#e08a5e;white-space:nowrap;">${t.hero.eyebrow}</span>
           <span style="flex:1;height:1px;background:rgba(255,255,255,.34);"></span>
-          <span style="${SS};font-size:11px;font-weight:600;letter-spacing:.18em;color:rgba(244,241,234,.78);white-space:nowrap;">50.73° N - 15.37° E</span>
+          <span class="hero-coords" style="${SS};font-size:11px;font-weight:600;letter-spacing:.18em;color:rgba(244,241,234,.78);white-space:nowrap;">50.73° N - 15.37° E</span>
         </div>
         <h1 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(66px,12.5vw,168px);line-height:.84;letter-spacing:-.012em;color:#F4F1EA;margin:0;">INGOT</h1>
         <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:22px;border-top:1px solid rgba(255,255,255,.24);padding-top:15px;">
@@ -329,7 +330,7 @@ function render(){
           <div style="display:flex;flex-direction:column;gap:7px;">
             <h3 style="${SS};font-weight:700;font-size:20px;color:#23221F;margin:0;">${name}</h3>
             <span style="${SS};font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#BF562E;">${role}</span>
-            <p style="font-size:15px;line-height:1.62;color:#56534c;margin:4px 0 0;">${line}</p>
+            ${line?`<p style="font-size:15px;line-height:1.62;color:#56534c;margin:4px 0 0;">${line}</p>`:''}
           </div>
         </div>`).join('')}
       </div>
