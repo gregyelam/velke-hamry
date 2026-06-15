@@ -1,0 +1,43 @@
+name: Update availability
+
+on:
+  schedule:
+    - cron: '15 */4 * * *'   # every 4 hours
+  workflow_dispatch:          # allow manual run
+
+permissions:
+  contents: write
+
+concurrency:
+  group: availability
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Playwright + Chromium
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Scrape Previo availability + prices
+        run: python scripts/fetch_availability.py
+
+      - name: Commit if changed
+        run: |
+          git config user.name "ingot-availability-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if ! git diff --quiet -- site/availability.json; then
+            git add site/availability.json
+            git commit -m "chore: refresh availability $(date -u +%FT%TZ)"
+            git push
+          else
+            echo "availability unchanged"
+          fi
