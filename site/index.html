@@ -4,7 +4,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>INGOT - designový apartmán v Jizerkách</title>
-<meta name="description" content="INGOT - architektonicky ukovaný designový apartmán s vlastní terasou v Jizerských horách. Surový navenek, jemný uvnitř. 87 minut z Prahy. Rezervujte napřímo.">
+<meta name="description" content="INGOT - architektonicky ukovaný designový apartmán s vlastní terasou v Jizerských horách. Surový navenek, jemný uvnitř. 87 minut z Prahy. Rezervujte napřímo, lepší cena než na portálech.">
+<link rel="canonical" href="https://ingot-hamry.cz/">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#2B2B28">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%232B2B28'/%3E%3Crect x='27' y='13' width='10' height='30' fill='%23F1EEE7'/%3E%3Crect x='27' y='43' width='10' height='8' fill='%23BF562E'/%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="INGOT">
+<meta property="og:title" content="INGOT - designový apartmán s terasou | Jizerské hory">
+<meta property="og:description" content="Architektonicky ukovaný designový apartmán s vlastní terasou v Jizerkách. Surový navenek, jemný uvnitř. 87 minut z Prahy. Rezervujte napřímo, lepší cena než na portálech.">
+<meta property="og:url" content="https://ingot-hamry.cz/">
+<meta property="og:image" content="https://ingot-hamry.cz/assets/og.jpg">
+<meta property="og:locale" content="cs_CZ">
+<meta property="og:locale:alternate" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="INGOT - designový apartmán v Jizerkách">
+<meta name="twitter:description" content="Architektonicky ukovaný designový apartmán s vlastní terasou. Rezervujte napřímo.">
+<meta name="twitter:image" content="https://ingot-hamry.cz/assets/og.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"LodgingBusiness","name":"INGOT","description":"Architektonicky ukovaný designový apartmán s vlastní terasou v Jizerských horách. Surový navenek, jemný uvnitř.","url":"https://ingot-hamry.cz/","image":"https://ingot-hamry.cz/assets/og.jpg","priceRange":"1500-3000 CZK","address":{"@type":"PostalAddress","addressLocality":"Velké Hamry","addressRegion":"Liberecký kraj","addressCountry":"CZ"},"geo":{"@type":"GeoCoordinates","latitude":50.73,"longitude":15.37},"amenityFeature":[{"@type":"LocationFeatureSpecification","name":"Terasa"},{"@type":"LocationFeatureSpecification","name":"Wi-Fi 250 Mb/s"},{"@type":"LocationFeatureSpecification","name":"Krytá garáž"},{"@type":"LocationFeatureSpecification","name":"Ohniště"}],"sameAs":["https://instagram.com/ingot_hamry"]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap" rel="stylesheet">
@@ -44,11 +61,18 @@
   #stickyCta{display:none;}
   @media(max-width:939px){#stickyCta{display:block;}}
   #stickyCta.hide{display:none!important;}
+  #consent{display:none;position:fixed;left:12px;right:12px;bottom:12px;z-index:80;max-width:540px;margin:0 auto;background:#23221F;color:#e7e3da;border-radius:6px;padding:16px 18px;box-shadow:0 12px 34px rgba(0,0,0,.4);font-size:13.5px;line-height:1.55;}
+  #consent.show{display:block;}
+  #consent .row{display:flex;gap:10px;margin-top:13px;flex-wrap:wrap;}
+  #consent button{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;border-radius:3px;padding:9px 17px;cursor:pointer;border:1px solid #4a4943;}
+  #consent .acc{background:#BF562E;color:#F1EEE7;border-color:#BF562E;}
+  #consent .dec{background:transparent;color:#c8c4ba;}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <div id="lb"></div>
+<div id="consent"><span id="consentText"></span><div class="row"><button class="acc" id="consentAcc"></button><button class="dec" id="consentDec"></button></div></div>
 
 <script>
 const GALLERY = [
@@ -610,6 +634,28 @@ async function handleSubmit(e){
   });
   render();
   fetch('availability.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{ if(j){ if(Array.isArray(j.booked)) BOOKED=j.booked; if(j.prices) PRICEMAP=j.prices; renderCal(); recalc(); } }).catch(()=>{});
+})();
+
+/* ---- analytics + cookie consent ---- */
+const CF_TOKEN = ""; // Cloudflare Web Analytics token (cookieless, privacy-first - NO consent banner needed). Enable in Cloudflare dashboard > Web Analytics, paste the token here.
+const GA_ID = "";    // Google Analytics 4 id, e.g. "G-XXXXXXX" (cookie-based -> auto-shows the consent banner). Leave empty to keep GA off.
+if(CF_TOKEN){ const s=document.createElement('script'); s.defer=true; s.src='https://static.cloudflareinsights.com/beacon.min.js'; s.setAttribute('data-cf-beacon', JSON.stringify({token:CF_TOKEN})); document.head.appendChild(s); }
+function loadGA(){ if(!GA_ID||window.__ga) return; window.__ga=true; const s=document.createElement('script'); s.async=true; s.src='https://www.googletagmanager.com/gtag/js?id='+GA_ID; document.head.appendChild(s); window.dataLayer=window.dataLayer||[]; window.gtag=function(){dataLayer.push(arguments);}; gtag('js', new Date()); gtag('config', GA_ID, {anonymize_ip:true}); }
+(function(){
+  if(!GA_ID) return;
+  let c=null; try{ c=localStorage.getItem('ingot_consent'); }catch(e){}
+  if(c==='yes'){ loadGA(); return; }
+  if(c==='no') return;
+  const el=document.getElementById('consent'); if(!el) return;
+  const cs = (document.documentElement.lang==='en')
+    ? {t:'We use cookies for anonymous visitor statistics.', a:'Accept', d:'Decline'}
+    : {t:'Používáme cookies pro anonymní statistiky návštěvnosti.', a:'Přijmout', d:'Odmítnout'};
+  document.getElementById('consentText').textContent=cs.t;
+  document.getElementById('consentAcc').textContent=cs.a;
+  document.getElementById('consentDec').textContent=cs.d;
+  el.classList.add('show');
+  document.getElementById('consentAcc').onclick=function(){ try{localStorage.setItem('ingot_consent','yes');}catch(e){} el.classList.remove('show'); loadGA(); };
+  document.getElementById('consentDec').onclick=function(){ try{localStorage.setItem('ingot_consent','no');}catch(e){} el.classList.remove('show'); };
 })();
 </script>
 </body>
