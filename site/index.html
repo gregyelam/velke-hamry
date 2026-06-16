@@ -59,8 +59,8 @@
   .cal-nav{background:none;border:none;cursor:pointer;font-size:18px;line-height:1;color:#7a766c;padding:4px 10px;}
   .cal-nav:disabled{opacity:.3;cursor:default;}
   #stickyCta{display:none;}
-  @media(max-width:939px){#stickyCta{display:block;}}
-  #stickyCta.hide{display:none!important;}
+  @media(max-width:939px){#stickyCta{display:block;transition:opacity .3s ease,transform .35s cubic-bezier(.2,.7,.2,1);}}
+  #stickyCta.hide{opacity:0!important;transform:translateY(130%)!important;pointer-events:none!important;}
   #consent{display:none;position:fixed;left:12px;right:12px;bottom:12px;z-index:80;max-width:540px;margin:0 auto;background:#23221F;color:#e7e3da;border-radius:6px;padding:16px 18px;box-shadow:0 12px 34px rgba(0,0,0,.4);font-size:13.5px;line-height:1.55;}
   #consent.show{display:block;}
   #consent .row{display:flex;gap:10px;margin-top:13px;flex-wrap:wrap;}
@@ -386,7 +386,7 @@ function render(){
       <span style="font-size:13px;color:#888479;">${t.footer.rights}</span>
     </div>
   </footer>
-  <a href="#rezervace" id="stickyCta" class="cta" style="position:fixed;left:12px;right:12px;bottom:12px;z-index:55;text-align:center;background:#BF562E;color:#F1EEE7;${SS};font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:15px;border-radius:4px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.28);">${t.nav.cta}</a>`;
+  <a href="#rezervace" id="stickyCta" class="cta hide" style="position:fixed;left:12px;right:12px;bottom:12px;z-index:55;text-align:center;background:#BF562E;color:#F1EEE7;${SS};font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:15px;border-radius:4px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.28);">${t.nav.cta}</a>`;
 
   attach();
   initReveal();
@@ -401,7 +401,7 @@ function attach(){
   app.querySelectorAll('.galbtn').forEach(b=> b.addEventListener('click', ()=> openLb(parseInt(b.getAttribute('data-idx'),10))));
   if(so) window.removeEventListener('scroll', so);
   const sticky=document.getElementById('stickyCta'), rezSec=document.getElementById('rezervace');
-  if(sticky && rezSec){ so=()=>{ const r=rezSec.getBoundingClientRect(); sticky.classList.toggle('hide', r.top < window.innerHeight*0.6); }; window.addEventListener('scroll', so, {passive:true}); so(); }
+  if(sticky && rezSec){ so=()=>{ const r=rezSec.getBoundingClientRect(); const pastHero=window.scrollY>window.innerHeight*0.55; const bookingNear=r.top<window.innerHeight*0.6; sticky.classList.toggle('hide', !(pastHero && !bookingNear)); }; window.addEventListener('scroll', so, {passive:true}); so(); }
   const form = document.getElementById('enquiry');
   if(form){
     form.addEventListener('submit', handleSubmit);
