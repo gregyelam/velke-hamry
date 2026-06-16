@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INGOT - Apartmán Jizera | Airbnb (návrh)</title>
+<style>
+  :root{
+    --r:#FF385C; --r2:#E61E4D; --ink:#222222; --muted:#717171; --line:#dddddd; --bg:#ffffff;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:"Airbnb Cereal","Circular",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;font-size:16px;line-height:1.45}
+  a{color:inherit}
+  .wrap{max-width:1128px;margin:0 auto;padding:0 24px}
+
+  /* HEADER */
+  header{border-bottom:1px solid #ebebeb;position:sticky;top:0;background:#fff;z-index:20}
+  .hd{display:flex;align-items:center;justify-content:space-between;height:80px;max-width:1128px;margin:0 auto;padding:0 24px}
+  .logo{display:flex;align-items:center;gap:7px;color:var(--r);font-weight:800;font-size:22px;letter-spacing:-.02em}
+  .logo svg{width:30px;height:30px;fill:var(--r)}
+  .searchbar{display:flex;align-items:center;border:1px solid var(--line);border-radius:40px;box-shadow:0 1px 2px rgba(0,0,0,.08);padding:8px 8px 8px 20px;font-size:14px;font-weight:600;gap:0}
+  .searchbar .seg{padding:0 16px;border-right:1px solid #e4e4e4}
+  .searchbar .seg:last-of-type{border-right:none;color:var(--muted);font-weight:500}
+  .searchbar .mag{width:32px;height:32px;border-radius:50%;background:var(--r);display:flex;align-items:center;justify-content:center;margin-left:8px}
+  .searchbar .mag svg{width:14px;height:14px;fill:#fff}
+  .hr{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600}
+  .hr .host{padding:12px;border-radius:22px}
+  .hr .globe,.hr .menu{width:42px;height:42px;border:1px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .hr .menu{width:auto;padding:5px 5px 5px 12px;gap:10px}
+  .hr .menu .av{width:30px;height:30px;border-radius:50%;background:#717171;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
+
+  /* NÁVRH badge */
+  .draft{position:fixed;right:14px;bottom:14px;background:#222;color:#fff;font-size:12px;font-weight:600;border-radius:20px;padding:8px 14px;z-index:50;opacity:.9}
+  .draft b{color:#FF8FA3}
+
+  /* TITLE */
+  h1.t{font-size:26px;font-weight:600;margin:28px 0 14px}
+  .titlerow{display:flex;justify-content:space-between;align-items:flex-end;margin-top:24px}
+  .titlerow h1{font-size:26px;font-weight:600;margin:0}
+  .titleacts{display:flex;gap:8px;font-size:14px;font-weight:600}
+  .titleacts a{display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:8px;text-decoration:underline;text-underline-offset:2px}
+
+  /* GALLERY */
+  .gal{display:grid;grid-template-columns:1fr 1fr;gap:8px;border-radius:14px;overflow:hidden;margin-top:14px;position:relative;aspect-ratio:2/1}
+  .gal .big{grid-row:1/3}
+  .gal img{width:100%;height:100%;object-fit:cover;display:block;background:#eee}
+  .gal .sm{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px}
+  .showall{position:absolute;right:16px;bottom:16px;background:#fff;border:1px solid #222;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px}
+
+  /* BODY GRID */
+  .body{display:grid;grid-template-columns:1fr 372px;gap:0 90px;margin-top:36px}
+  @media(max-width:900px){.body{grid-template-columns:1fr}}
+  .left{min-width:0}
+  hr.s{border:none;border-top:1px solid #ebebeb;margin:30px 0}
+
+  .lead h2{font-size:22px;font-weight:600;margin:0 0 4px}
+  .lead .meta{font-size:16px;color:var(--ink)}
+  .lead .new{display:inline-flex;align-items:center;gap:6px;font-weight:600;margin-top:8px}
+
+  /* host strip */
+  .hoststrip{display:flex;align-items:center;gap:14px;padding:22px 0}
+  .hoststrip .pic{width:46px;height:46px;border-radius:50%;background:#d7a3b0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;position:relative}
+  .hoststrip .pic .sb{position:absolute;right:-3px;bottom:-3px;width:18px;height:18px;background:var(--r);border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center}
+  .hoststrip .pic .sb svg{width:9px;height:9px;fill:#fff}
+  .hoststrip .ht{font-weight:600}
+  .hoststrip .hs{color:var(--muted);font-size:14px}
+
+  /* feature rows */
+  .feat{display:flex;gap:18px;align-items:flex-start;padding:14px 0}
+  .feat .ic{width:24px;flex:0 0 24px;text-align:center;font-size:20px}
+  .feat .ft{font-weight:600}
+  .feat .fd{color:var(--muted);font-size:14px}
+
+  .desc p{margin:0 0 14px;font-size:16px}
+  .desc .brand{font-style:italic;font-weight:600;color:var(--ink);margin-bottom:14px}
+  .more{font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+
+  h3.sec{font-size:22px;font-weight:600;margin:0 0 18px}
+  /* sleep cards */
+  .sleep{display:grid;grid-template-columns:repeat(2,minmax(0,200px));gap:16px}
+  .sleep .c img{width:100%;height:130px;object-fit:cover;border-radius:12px;border:1px solid #ebebeb}
+  .sleep .c .n{font-weight:600;margin-top:10px}
+  .sleep .c .d{color:var(--muted);font-size:14px}
+
+  /* amenities */
+  .amen{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .amen .a{display:flex;gap:16px;align-items:center;font-size:16px;padding:6px 0}
+  .amen .a.strike{color:#b0b0b0;text-decoration:line-through}
+  .amen .a .ai{width:24px;text-align:center;font-size:20px}
+  .btnline{display:inline-block;margin-top:24px;border:1px solid #222;border-radius:8px;padding:13px 22px;font-weight:600;font-size:15px}
+
+  /* map */
+  .map{height:340px;background:#e9eef0 url('https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Blank_map.svg/640px-Blank_map.svg.png') center/cover no-repeat;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#9aa;margin-top:14px;border:1px solid #ebebeb}
+
+  /* BOOKING CARD */
+  .bk{position:sticky;top:100px;border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:0 6px 16px rgba(0,0,0,.12)}
+  .bk .urg{display:flex;gap:10px;align-items:flex-start;font-size:14px;margin-bottom:18px}
+  .bk .urg .fire{font-size:18px}
+  .bk .dates{border:1px solid #b0b0b0;border-radius:10px;overflow:hidden}
+  .bk .dr{display:grid;grid-template-columns:1fr 1fr}
+  .bk .cell{padding:10px 12px;border-bottom:1px solid #b0b0b0}
+  .bk .cell.r{border-left:1px solid #b0b0b0}
+  .bk .cell .lab{font-size:10px;font-weight:700;letter-spacing:.04em}
+  .bk .cell .val{font-size:14px}
+  .bk .cell.full{grid-column:1/3;border-bottom:none}
+  .bk .err{color:var(--r2);font-size:13px;margin:12px 0;display:flex;gap:6px;align-items:center}
+  .bk .cta{display:block;text-align:center;color:#fff;font-weight:600;font-size:16px;border-radius:10px;padding:14px;margin-top:16px;background:linear-gradient(to right,var(--r),var(--r2))}
+  .bk .report{text-align:center;color:var(--muted);font-size:14px;margin-top:18px;text-decoration:underline}
+
+  /* host section */
+  .hostbox{display:grid;grid-template-columns:300px 1fr;gap:40px;align-items:start}
+  @media(max-width:760px){.hostbox{grid-template-columns:1fr}.amen{grid-template-columns:1fr}.sleep{grid-template-columns:1fr 1fr}}
+  .hcard{border:1px solid #ebebeb;border-radius:18px;box-shadow:0 6px 16px rgba(0,0,0,.08);padding:26px;display:flex;align-items:center;gap:20px}
+  .hcard .big{display:flex;flex-direction:column;align-items:center}
+  .hcard .av{width:90px;height:90px;border-radius:50%;background:#d7a3b0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:30px;font-weight:700;position:relative}
+  .hcard .nm{font-weight:700;font-size:22px;margin-top:12px}
+  .hcard .sup{font-size:13px;display:flex;align-items:center;gap:5px}
+  .hcard .stats .s{padding:8px 0;border-bottom:1px solid #ebebeb}
+  .hcard .stats .s:last-child{border-bottom:none}
+  .hcard .stats .num{font-weight:700;font-size:18px}
+  .hcard .stats .cap{font-size:11px}
+
+  /* important info */
+  .imp{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
+  @media(max-width:760px){.imp{grid-template-columns:1fr}}
+  .imp h4{font-size:16px;margin:0 0 10px}
+  .imp p{font-size:14px;color:#222;margin:0 0 4px}
+  .imp .ln{font-size:14px;text-decoration:underline;font-weight:600}
+
+  footer{border-top:1px solid #ebebeb;margin-top:40px;background:#f7f7f7}
+  .fcols{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;padding:40px 0}
+  @media(max-width:760px){.fcols{grid-template-columns:1fr 1fr}}
+  .fcols h5{font-size:14px;margin:0 0 14px}
+  .fcols a{display:block;font-size:14px;color:var(--muted);text-decoration:none;margin-bottom:10px}
+  .fbar{border-top:1px solid #ddd;padding:18px 0;font-size:14px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div class="draft">● NÁVRH INGOT &nbsp;<b>(žádná data nejsou živá)</b></div>
+
+<!-- HEADER -->
+<header>
+  <div class="hd">
+    <div class="logo">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 1c1.9 0 3.5 1.6 3.5 3.5 0 .9-.3 1.7-.9 2.3 1 1.1 2.4 3 3.8 5.7 1.9 3.6 3 6 3 8.5 0 3.5-2.8 6.3-6.3 6.3-1.9 0-3.6-.8-4.8-2.2L16 28l.4.4C15.2 29.5 13.5 30.3 11.6 30.3 8.1 30.3 5.3 27.5 5.3 24c0-2.5 1.1-4.9 3-8.5 1.4-2.7 2.8-4.6 3.8-5.7-.6-.6-.9-1.4-.9-2.3C11.2 2.6 12.8 1 14.7 1c.5 0 .9.1 1.3.3.4-.2.8-.3 1.3-.3zm0 3c-.8 0-1.4.6-1.4 1.4 0 .5.2.9.6 1.2l.8.6.8-.6c.4-.3.6-.7.6-1.2C17.4 4.6 16.8 4 16 4zm0 7.2c-1.1 1.4-2.3 3.2-3.4 5.3-1.6 3-2.5 5.1-2.5 6.9 0 2 1.6 3.6 3.6 3.6 1.1 0 2.1-.5 2.7-1.4-1-1.4-1.6-2.9-1.6-4.2 0-1.4.9-2.4 2.2-2.4s2.2 1 2.2 2.4c0 1.3-.6 2.8-1.6 4.2.6.9 1.6 1.4 2.7 1.4 2 0 3.6-1.6 3.6-3.6 0-1.8-.9-3.9-2.5-6.9-1.1-2.1-2.3-3.9-3.4-5.3z"/></svg>
+      airbnb
+    </div>
+    <div class="searchbar">
+      <span class="seg">Kamkoliv</span>
+      <span class="seg">Kdykoliv</span>
+      <span class="seg">Přidat hosty</span>
+      <span class="mag"><svg viewBox="0 0 24 24"><path d="M10 2a8 8 0 105 14.3l5.3 5.3 1.4-1.4-5.3-5.3A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/></svg></span>
+    </div>
+    <div class="hr">
+      <span class="host">Staň se hostitelem</span>
+      <span class="globe">🌐</span>
+      <span class="menu"><span>☰</span><span class="av">M</span></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- TITLE -->
+  <div class="titlerow">
+    <h1>INGOT - designový apartmán s terasou | Jizerky</h1>
+    <div class="titleacts">
+      <a>↗ Sdílet</a>
+      <a>♡ Uložit</a>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="gal">
+    <img class="big" src="assets/terrace_hero.jpg" alt="Terasa">
+    <div class="sm">
+      <img src="assets/facade.jpg" alt="Fasáda">
+      <img src="assets/IMG_9206.jpg" alt="Kuchyně">
+      <img src="assets/IMG_9203.jpg" alt="Ložnice">
+      <img src="assets/IMG_9210.jpg" alt="Koupelna">
+    </div>
+    <div class="showall">▦ Zobrazit všechny fotky</div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+    <div class="left">
+
+      <div class="lead">
+        <h2>Celá nemovitost: designový apartmán v místě Velké Hamry, Česko</h2>
+        <div class="meta">3 hosté · 1 ložnice · 2 lůžka · 1 koupelna</div>
+        <div class="new">★ Nové</div>
+      </div>
+
+      <hr class="s">
+
+      <div class="hoststrip">
+        <div class="pic">P<span class="sb"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6 4.5 2.3 7.1L12 16.6 5.7 21l2.3-7.1-6-4.5h7.6z"/></svg></span></div>
+        <div>
+          <div class="ht">Hostitelem je Petra</div>
+          <div class="hs">Superhostitel · 11 měsíců hostí</div>
+        </div>
+      </div>
+
+      <hr class="s">
+
+      <div class="feat"><div class="ic">🏔️</div><div><div class="ft">Designová architektura (studio Reaktor)</div><div class="fd">„Ukovaný obytný ingot" s černou fasádou a borovým interiérem - v Jizerkách ojedinělé.</div></div></div>
+      <div class="feat"><div class="ic">🌿</div><div><div class="ft">Vlastní terasa a předzahrádka</div><div class="fd">Soukromé venkovní posezení pro relax na čerstvém horském vzduchu.</div></div></div>
+      <div class="feat"><div class="ic">🚗</div><div><div class="ft">Parkuj zdarma</div><div class="fd">Krytá garáž přímo pod domem - v okolí vzácnost.</div></div></div>
+
+      <hr class="s">
+
+      <div class="desc">
+        <p class="brand">Inspirováno Severem. Ukováno v Jizerkách.</p>
+        <p>INGOT je přízemní designový apartmán na okraji Jizerských hor, postavený podle architektonického konceptu studia Reaktor jako jeden z „ukovaných obytných ingotů" - černá kovová fasáda, teplý borový interiér. Vyniká hřejivým dřevem (CLT konstrukce), severskou jednoduchostí a silným propojením s okolní přírodou.</p>
+        <p>Největší předností je <b>vlastní předzahrádka a soukromá terasa</b> - místo na ranní kávu a večerní ticho, které většina apartmánů v Jizerkách nemá. K dispozici je plně vybavená kuchyň (lednice, mrazák, trouba, varná deska, kávovar), TV, Wi-Fi 250 Mb/s a parkování v kryté garáži zdarma.</p>
+        <span class="more">Zobrazit více ›</span>
+      </div>
+
+      <hr class="s">
+
+      <h3 class="sec">Kde budeš spát</h3>
+      <div class="sleep">
+        <div class="c"><img src="assets/IMG_9203.jpg" alt="Ložnice"><div class="n">Ložnice</div><div class="d">1 manželská postel (180×200)</div></div>
+        <div class="c"><img src="assets/IMG_9205.jpg" alt="Obývací pokoj"><div class="n">Obývací pokoj</div><div class="d">1 rozkládací pohovka (120×200)</div></div>
+      </div>
+
+      <hr class="s">
+
+      <h3 class="sec">Co toto ubytování nabízí</h3>
+      <div class="amen">
+        <div class="a"><span class="ai">🍳</span>Kuchyně</div>
+        <div class="a"><span class="ai">📶</span>Wifi 250 Mb/s</div>
+        <div class="a"><span class="ai">🅿️</span>Parkování na pozemku zdarma</div>
+        <div class="a"><span class="ai">📺</span>TV</div>
+        <div class="a"><span class="ai">🌿</span>Soukromá terasa a předzahrádka</div>
+        <div class="a"><span class="ai">🌳</span>Společný dvorek</div>
+        <div class="a"><span class="ai">☕</span>Kávovar</div>
+        <div class="a"><span class="ai">💨</span>Fén</div>
+        <div class="a"><span class="ai">🚲</span>Úložna na kola a lyže</div>
+        <div class="a"><span class="ai">🚨</span>Detektor oxidu uhelnatého</div>
+      </div>
+      <div class="btnline">Ukázat všech 31 položek vybavení</div>
+
+      <hr class="s">
+
+      <h3 class="sec">Kde se ubytování nachází</h3>
+      <div style="color:var(--muted)">Velké Hamry, Liberec Region, Česko</div>
+      <div class="map">mapa</div>
+
+    </div>
+
+    <!-- BOOKING CARD -->
+    <aside>
+      <div class="bk">
+        <div class="urg"><span class="fire">🔥</span><div>Jednej rychle, na rezervování ti zbývá jenom <b>14 hodin</b></div></div>
+        <div class="dates">
+          <div class="dr">
+            <div class="cell"><div class="lab">PŘÍJEZD</div><div class="val">4. 6. 2026</div></div>
+            <div class="cell r"><div class="lab">ODJEZD</div><div class="val">9. 6. 2026</div></div>
+          </div>
+          <div class="cell full"><div class="lab">HOSTÉ</div><div class="val">1 host</div></div>
+        </div>
+        <div class="err">⚠ Tento termín není k dispozici</div>
+        <a class="cta">Zkontrolovat dostupnost</a>
+        <div class="report">Nahlásit tuto nabídku ubytování</div>
+      </div>
+    </aside>
+  </div>
+
+  <hr class="s">
+
+  <!-- REVIEWS -->
+  <h3 class="sec">Nové · Žádná hodnocení (prozatím)</h3>
+  <div style="display:flex;gap:14px;align-items:center;color:var(--muted)">
+    <span style="font-size:22px">★</span>
+    <div>Tento hostitel má 15 hodnocení u jiných nabídek ubytování. <a style="text-decoration:underline;font-weight:600;color:#222">Ukázat další hodnocení</a></div>
+  </div>
+
+  <hr class="s">
+
+  <!-- HOST -->
+  <h3 class="sec">Poznej svého hostitele</h3>
+  <div class="hostbox">
+    <div class="hcard">
+      <div class="big">
+        <div class="av">P<span class="sb"></span></div>
+        <div class="nm">Petra</div>
+        <div class="sup">★ Superhostitel</div>
+      </div>
+      <div class="stats">
+        <div class="s"><div class="num">15</div><div class="cap">Hodnocení</div></div>
+        <div class="s"><div class="num">4,8★</div><div class="cap">Hodnocení</div></div>
+        <div class="s"><div class="num">11</div><div class="cap">Měsíců hostí</div></div>
+      </div>
+    </div>
+    <div>
+      <div style="font-weight:600;margin-bottom:8px">Petra je Superhostitel</div>
+      <p style="color:#222;font-size:15px;margin:0 0 20px">Superhostitelé mají mnoho zkušeností, dostávají vysoká hodnocení a jsou mistry v poskytování nezapomenutelného pobytu.</p>
+      <div style="font-weight:600">Spoluhostitelé</div>
+      <div style="display:flex;align-items:center;gap:10px;margin:10px 0 20px"><span style="width:30px;height:30px;border-radius:50%;background:#bbb;display:inline-block"></span> Pavel</div>
+      <div style="color:#222;font-size:14px;margin-bottom:4px">⏱ Čím se živím: správce ubytování</div>
+      <div style="color:#222;font-size:14px;margin-bottom:16px">🏢 Firma</div>
+      <div style="color:#222;font-size:14px">Index odpovědí: 100 %</div>
+      <div style="color:#222;font-size:14px">Reaguje během jedné hodiny</div>
+      <div class="btnline" style="margin-top:18px">Napsat hostiteli</div>
+    </div>
+  </div>
+
+  <hr class="s">
+
+  <!-- IMPORTANT INFO -->
+  <h3 class="sec">Důležité informace</h3>
+  <div class="imp">
+    <div>
+      <h4>Storno podmínky</h4>
+      <p>Tato rezervace je nevratná.</p>
+      <p>Podrobnosti se zobrazí v plném znění podmínek hostitele.</p>
+      <span class="ln">Další informace</span>
+    </div>
+    <div>
+      <h4>Domácí pravidla</h4>
+      <p>Příjezd po 15:00</p>
+      <p>Maximálně 3 hosté</p>
+      <p>Samoobslužný proces ubytování</p>
+      <span class="ln">Další informace</span>
+    </div>
+    <div>
+      <h4>Bezpečnost a nemovitost</h4>
+      <p>Detektor oxidu uhelnatého není uveden</p>
+      <p>Bezpečnostní kamery ve venkovních prostorech</p>
+      <p>Detektor kouře</p>
+      <span class="ln">Další informace</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <h5>Podívej se na další možnosti v destinaci Velké Hamry a okolí</h5>
+        <a>Vídeň · Rekreační pronájmy</a>
+        <a>Budapešť · Rekreační pronájmy</a>
+        <a>Mnichov · Rekreační pronájmy</a>
+      </div>
+      <div>
+        <h5>&nbsp;</h5>
+        <a>Hamburk · Rekreační pronájmy</a>
+        <a>Bratislava · Rekreační pronájmy</a>
+        <a>Salcburk · Rekreační pronájmy</a>
+      </div>
+      <div>
+        <h5>Jiné typy pobytů na Airbnb</h5>
+        <a>Kořenov · měsíční pobyty</a>
+        <a>Rekreační pronájmy v lokalitě Jablonec nad Nisou</a>
+        <a>Rekreační pronájmy v lokalitě Liberec</a>
+      </div>
+    </div>
+    <div class="wrap"><div class="fbar">© 2026 INGOT (návrh) · Airbnb-style náhled · Soukromí · Podmínky</div></div>
+  </div>
+</footer>
+
+</body>
+</html>

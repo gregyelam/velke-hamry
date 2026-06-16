@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INGOT - designový apartmán v Jizerských horách</title>
+<meta name="description" content="INGOT - architektonicky ukovaný designový apartmán s vlastní terasou na okraji Jizerských hor. Studio Reaktor, CLT dřevo, severská jednoduchost. Rezervujte přímo za nejlepší cenu.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F2EA;        /* warm paper */
+    --paper2:#EFEAE0;
+    --metal:#1C1B19;        /* black metal facade */
+    --metal2:#2A2826;
+    --ink:#1C1B19;
+    --muted:#6B6760;
+    --line:#DAD3C7;
+    --pine:#B07D4F;         /* warm wood */
+    --sage:#8B9A84;         /* sage accent */
+    --sage-d:#6F7E69;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;line-height:1.55;font-size:17px}
+  h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:500;line-height:1.1;letter-spacing:-.01em;margin:0}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+  .eyebrow{font-family:"Inter";font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--sage-d)}
+
+  /* NAV */
+  header{position:sticky;top:0;z-index:40;background:rgba(246,242,234,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .brand{font-family:"Fraunces";font-weight:600;font-size:23px;letter-spacing:.32em;padding-left:.32em}
+  .nav .links{display:flex;gap:30px;font-size:14px;font-weight:500;color:var(--muted)}
+  .nav .links a:hover{color:var(--ink)}
+  .nav .cta{background:var(--metal);color:var(--paper);padding:11px 20px;border-radius:2px;font-size:14px;font-weight:600;letter-spacing:.02em}
+  .nav .cta:hover{background:var(--pine)}
+  @media(max-width:820px){.nav .links{display:none}}
+
+  /* HERO */
+  .hero{position:relative;min-height:88vh;display:flex;align-items:flex-end;color:#fff;overflow:hidden}
+  .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+  .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,19,17,.15) 0%,rgba(20,19,17,.15) 40%,rgba(20,19,17,.78) 100%);z-index:1}
+  .hero .inner{position:relative;z-index:2;padding-bottom:64px;max-width:760px}
+  .hero .eyebrow{color:rgba(255,255,255,.82)}
+  .hero h1{font-size:clamp(54px,11vw,128px);font-weight:400;letter-spacing:.06em;margin:.18em 0 .12em;text-indent:.06em}
+  .hero .tag{font-family:"Fraunces";font-style:italic;font-size:clamp(20px,3.4vw,30px);font-weight:400;color:#fff;opacity:.95}
+  .hero .sub{margin-top:18px;font-size:16px;max-width:540px;color:rgba(255,255,255,.86)}
+  .hero .btns{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:15px 26px;border-radius:2px;font-size:15px;font-weight:600;letter-spacing:.02em;cursor:pointer;border:1px solid transparent;transition:.18s}
+  .btn-p{background:var(--pine);color:#fff}
+  .btn-p:hover{background:#9a6b41}
+  .btn-o{background:transparent;color:#fff;border-color:rgba(255,255,255,.6)}
+  .btn-o:hover{background:rgba(255,255,255,.12)}
+
+  /* SECTION shells */
+  section{padding:92px 0}
+  .lede{max-width:680px;margin-bottom:54px}
+  .lede h2{font-size:clamp(30px,5vw,46px);margin:14px 0 0}
+  .lede p{color:var(--muted);font-size:18px;margin:18px 0 0}
+
+  /* STORY */
+  .story{background:var(--paper)}
+  .cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:46px}
+  @media(max-width:820px){.cols3{grid-template-columns:1fr;gap:34px}}
+  .col h3{font-size:22px;margin-bottom:10px}
+  .col .k{font-family:"Inter";font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--pine);margin-bottom:14px}
+  .col p{color:var(--muted);margin:0;font-size:16px}
+
+  /* USP strip */
+  .usp{background:var(--metal);color:var(--paper)}
+  .usp .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:34px}
+  @media(max-width:820px){.usp .grid{grid-template-columns:1fr 1fr;gap:30px}}
+  .usp .u .n{font-family:"Fraunces";font-size:38px;font-weight:400;color:#fff}
+  .usp .u .t{margin-top:8px;font-size:14px;color:rgba(246,242,234,.72);line-height:1.5}
+
+  /* GALLERY */
+  .gal{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:200px;gap:10px}
+  .gal a{display:block;overflow:hidden;border-radius:3px}
+  .gal img{width:100%;height:100%;object-fit:cover;display:block;transition:.5s;background:#ddd}
+  .gal a:hover img{transform:scale(1.05)}
+  .gal .w2{grid-column:span 2}.gal .h2{grid-row:span 2}
+  @media(max-width:820px){.gal{grid-template-columns:1fr 1fr;grid-auto-rows:150px}.gal .w2{grid-column:span 2}}
+
+  /* AVAILABILITY */
+  .avail{background:var(--paper2)}
+  .frame{border:1px solid var(--line);border-radius:4px;overflow:hidden;background:#fff}
+  .frame iframe{width:100%;height:620px;border:0;display:block}
+  .availnote{margin-top:16px;font-size:14px;color:var(--muted)}
+
+  /* BOOKING / INQUIRY */
+  .book .split{display:grid;grid-template-columns:1.05fr 1fr;gap:60px;align-items:start}
+  @media(max-width:820px){.book .split{grid-template-columns:1fr;gap:40px}}
+  .pitch h2{font-size:clamp(30px,5vw,46px)}
+  .pitch ul{list-style:none;padding:0;margin:26px 0 0}
+  .pitch li{display:flex;gap:14px;padding:11px 0;font-size:16px;color:var(--ink);border-bottom:1px solid var(--line)}
+  .pitch li b{font-weight:600}
+  .pitch .tick{color:var(--sage-d);font-weight:700}
+  .pitch .alt{margin-top:26px;font-size:14px;color:var(--muted)}
+  .pitch .alt a{color:var(--pine);font-weight:600;border-bottom:1px solid var(--pine)}
+
+  form{background:#fff;border:1px solid var(--line);border-radius:5px;padding:30px}
+  form h3{font-size:21px;margin-bottom:4px}
+  form .fsub{color:var(--muted);font-size:14px;margin-bottom:22px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  label{display:block;font-size:13px;font-weight:600;color:var(--ink);margin:14px 0 6px}
+  input,textarea{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:3px;font:inherit;font-size:15px;background:var(--paper);color:var(--ink)}
+  input:focus,textarea:focus{outline:none;border-color:var(--pine);background:#fff}
+  textarea{resize:vertical;min-height:84px}
+  form .send{margin-top:22px;width:100%;justify-content:center;background:var(--metal);color:#fff}
+  form .send:hover{background:var(--pine)}
+  form .fine{margin-top:14px;font-size:12px;color:var(--muted);text-align:center}
+
+  /* OKOLI */
+  .okoli .cols3 .col{padding:24px;border:1px solid var(--line);border-radius:4px;background:#fff}
+  .okoli .col h3{font-size:18px}
+  .okoli .col p{font-size:15px;margin-top:8px}
+
+  /* FOOTER */
+  footer{background:var(--metal);color:rgba(246,242,234,.8);padding:64px 0 40px}
+  footer .ft{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-end}
+  footer .brand{color:#fff}
+  footer .tag{font-family:"Fraunces";font-style:italic;color:rgba(246,242,234,.7);margin-top:10px}
+  footer a.ig{color:#fff;border-bottom:1px solid var(--pine);font-weight:600}
+  footer .meta{font-size:13px;color:rgba(246,242,234,.5);margin-top:30px;border-top:1px solid #38352f;padding-top:20px}
+
+  .draft{position:fixed;right:14px;bottom:14px;background:var(--metal);color:#fff;font-size:11px;font-weight:600;border-radius:20px;padding:7px 13px;z-index:60;opacity:.92;letter-spacing:.04em}
+  .draft b{color:var(--pine)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#" class="brand">INGOT</a>
+    <nav class="links">
+      <a href="#apartman">Apartmán</a>
+      <a href="#galerie">Galerie</a>
+      <a href="#dostupnost">Dostupnost</a>
+      <a href="#okoli">Okolí</a>
+    </nav>
+    <a href="#rezervace" class="cta">Poptat termín</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" style="padding:0">
+  <img src="assets/terrace_hero.jpg" alt="INGOT - terasa apartmánu v Jizerských horách">
+  <div class="wrap inner">
+    <div class="eyebrow">Velké Hamry · Jizerské hory</div>
+    <h1>INGOT</h1>
+    <div class="tag">Inspirováno Severem. Ukováno v Jizerkách.</div>
+    <p class="sub">Architektonicky ukovaný designový apartmán s vlastní terasou a předzahrádkou. Surový navenek, jemný uvnitř. 87 minut z Prahy.</p>
+    <div class="btns">
+      <a href="#rezervace" class="btn btn-p">Poptat termín za nejlepší cenu</a>
+      <a href="#dostupnost" class="btn btn-o">Zobrazit dostupnost</a>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="story" id="apartman">
+  <div class="wrap">
+    <div class="lede">
+      <div class="eyebrow">O apartmánu</div>
+      <h2>Surový navenek, jemný uvnitř.</h2>
+      <p>INGOT je přízemní designový apartmán postavený podle konceptu studia Reaktor jako jeden z „ukovaných obytných ingotů" - černá kovová fasáda, teplý borový interiér. Úroveň designu, která v Jizerkách není běžná.</p>
+    </div>
+    <div class="cols3">
+      <div class="col">
+        <div class="k">Architektura</div>
+        <h3>Studio Reaktor</h3>
+        <p>Ingotový tvar, černá kovová fasáda, industriální heritage přímo z Velkých Hamrů - železné hamry od 13. století. Exteriér je identita, ne povrch.</p>
+      </div>
+      <div class="col">
+        <div class="k">Interiér</div>
+        <h3>CLT a borové dřevo</h3>
+        <p>Hřejivé dřevo, sage akcenty, kurátované umění a severská jednoduchost. Teplo a detail jako kontrast k surovému exteriéru.</p>
+      </div>
+      <div class="col">
+        <div class="k">Místo</div>
+        <h3>Vlastní terasa a zahrádka</h3>
+        <p>Soukromé venkovní posezení s výhledem do lesa - místo na ranní kávu a večerní ticho, které většina apartmánů v Jizerkách nemá.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USP -->
+<section class="usp">
+  <div class="wrap grid">
+    <div class="u"><div class="n">87 min</div><div class="t">z Prahy do Velkých Hamrů</div></div>
+    <div class="u"><div class="n">Terasa</div><div class="t">vlastní terasa + předzahrádka, vzácnost v segmentu</div></div>
+    <div class="u"><div class="n">Garáž</div><div class="t">krytá garáž zdarma přímo pod domem</div></div>
+    <div class="u"><div class="n">250 Mb/s</div><div class="t">Wi-Fi, plně vybavená kuchyň, ideální i na práci</div></div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="galerie">
+  <div class="wrap">
+    <div class="lede"><div class="eyebrow">Galerie</div><h2>Pohled dovnitř i ven.</h2></div>
+    <div class="gal">
+      <a href="assets/IMG_9201.jpg" target="_blank" class="w2 h2"><img src="assets/IMG_9201.jpg" alt="INGOT interiér"></a>
+      <a href="assets/IMG_9203.jpg" target="_blank"><img src="assets/IMG_9203.jpg" alt="INGOT detail"></a>
+      <a href="assets/IMG_9205.jpg" target="_blank"><img src="assets/IMG_9205.jpg" alt="INGOT obývací prostor"></a>
+      <a href="assets/IMG_9206.jpg" target="_blank" class="w2"><img src="assets/IMG_9206.jpg" alt="INGOT kuchyň"></a>
+      <a href="assets/facade.jpg" target="_blank"><img src="assets/facade.jpg" alt="INGOT černá kovová fasáda"></a>
+      <a href="assets/IMG_9210.jpg" target="_blank"><img src="assets/IMG_9210.jpg" alt="INGOT ložnice"></a>
+      <a href="assets/IMG_9207.jpg" target="_blank"><img src="assets/IMG_9207.jpg" alt="INGOT detail interiéru"></a>
+      <a href="assets/IMG_9208.jpg" target="_blank"><img src="assets/IMG_9208.jpg" alt="INGOT prostor"></a>
+      <a href="assets/IMG_9209.jpg" target="_blank"><img src="assets/IMG_9209.jpg" alt="INGOT zahrádka"></a>
+    </div>
+  </div>
+</section>
+
+<!-- AVAILABILITY (live Previo) -->
+<section class="avail" id="dostupnost">
+  <div class="wrap">
+    <div class="lede"><div class="eyebrow">Dostupnost a ceny</div><h2>Volné termíny v reálném čase.</h2>
+      <p>Živý kalendář dostupnosti a cen přímo z rezervačního systému. Pro nejlepší cenu pošlete poptávku níže - vyřídíme ji napřímo.</p>
+    </div>
+    <div class="frame">
+      <iframe title="INGOT - dostupnost a ceny"
+        src="https://booking.previo.cz/occupancy/?hotId=789961&currency=CZK&lang=cs&showRoomType=995241&redirectType=iframe"
+        loading="lazy"></iframe>
+    </div>
+    <p class="availnote">Kalendář zobrazuje živá data pro tento apartmán (Apartmán Jizera / INGOT).</p>
+  </div>
+</section>
+
+<!-- BOOKING / INQUIRY -->
+<section class="book" id="rezervace">
+  <div class="wrap split">
+    <div class="pitch">
+      <div class="eyebrow">Rezervace</div>
+      <h2>Rezervujte napřímo.</h2>
+      <ul>
+        <li><span class="tick">✓</span> <span><b>Nejlepší cena.</b> Bez prostředníka, bez příplatků portálů.</span></li>
+        <li><span class="tick">✓</span> <span><b>Přímý kontakt.</b> Rezervaci vyřídíme my, ne anonymní portál.</span></li>
+        <li><span class="tick">✓</span> <span><b>Flexibilita.</b> Domluvíme příjezd, tipy na okolí i speciální přání.</span></li>
+      </ul>
+      <p class="alt">Chcete rezervovat hned přes rezervační systém? <a href="https://booking.previo.cz/?hotId=789961&currency=CZK&lang=cs&roomType=995241" target="_blank" rel="noopener">Otevřít rezervační formulář →</a></p>
+    </div>
+
+    <form id="inquiry" onsubmit="return sendInquiry(event)">
+      <h3>Poptat termín</h3>
+      <div class="fsub">Ozveme se obvykle do pár hodin s potvrzením a cenou.</div>
+      <div class="row">
+        <div><label for="arr">Příjezd</label><input type="date" id="arr" required></div>
+        <div><label for="dep">Odjezd</label><input type="date" id="dep" required></div>
+      </div>
+      <div class="row">
+        <div><label for="guests">Počet hostů</label><input type="number" id="guests" min="1" max="3" value="2" required></div>
+        <div><label for="name">Jméno</label><input type="text" id="name" placeholder="Vaše jméno" required></div>
+      </div>
+      <div class="row">
+        <div><label for="email">E-mail</label><input type="email" id="email" placeholder="vas@email.cz" required></div>
+        <div><label for="phone">Telefon</label><input type="tel" id="phone" placeholder="+420"></div>
+      </div>
+      <label for="msg">Poznámka (nepovinné)</label>
+      <textarea id="msg" placeholder="Cokoliv, co bychom měli vědet..."></textarea>
+      <button type="submit" class="btn send">Odeslat poptávku</button>
+      <div class="fine">Odesláním nás kontaktujete napřímo. Žádná platba teď.</div>
+    </form>
+  </div>
+</section>
+
+<!-- OKOLI -->
+<section class="okoli" id="okoli" style="background:var(--paper2)">
+  <div class="wrap">
+    <div class="lede"><div class="eyebrow">Okolí</div><h2>Co dělat kolem.</h2>
+      <p>Jizerky i Krkonoše na dosah. (Konkrétní tipy doplníme - trasy, vodopády, restaurace.)</p></div>
+    <div class="cols3">
+      <div class="col"><h3>Výlety a vyhlídky</h3><p>Tipy budou doplněny.</p></div>
+      <div class="col"><h3>Cyklo a turistika</h3><p>Tipy budou doplněny.</p></div>
+      <div class="col"><h3>Restaurace a kavárny</h3><p>Tipy budou doplněny.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap ft">
+    <div>
+      <div class="brand" style="font-family:'Fraunces';font-size:24px;letter-spacing:.3em;font-weight:600">INGOT</div>
+      <div class="tag">Inspirováno Severem. Ukováno v Jizerkách.</div>
+    </div>
+    <div style="text-align:right">
+      <div>Instagram: <a class="ig" href="https://instagram.com/ingot_hamry" target="_blank" rel="noopener">@ingot_hamry</a></div>
+      <div style="margin-top:8px;font-size:14px">Velké Hamry, Jizerské hory</div>
+    </div>
+  </div>
+  <div class="wrap"><div class="meta">Rezervujete přímo u nás, bez prostředníka. © 2026 INGOT</div></div>
+</footer>
+
+<div class="draft">NÁVRH v1 · <b>placeholder kontakt + cena</b></div>
+
+<script>
+  // TODO: nahradit placeholder e-mail reálným (Martin/Smeky) nebo napojit Formspree/Google Form pro odeslání bez mail klienta.
+  var INQUIRY_EMAIL = "ahoj@ingot-hamry.cz"; // placeholder
+  function sendInquiry(e){
+    e.preventDefault();
+    var g=function(id){return (document.getElementById(id).value||"").trim();};
+    var subject="Poptavka INGOT: "+g("arr")+" - "+g("dep")+" ("+g("name")+")";
+    var body=
+      "Prijezd: "+g("arr")+"\n"+
+      "Odjezd: "+g("dep")+"\n"+
+      "Pocet hostu: "+g("guests")+"\n"+
+      "Jmeno: "+g("name")+"\n"+
+      "E-mail: "+g("email")+"\n"+
+      "Telefon: "+g("phone")+"\n"+
+      "Poznamka: "+g("msg")+"\n";
+    window.location.href="mailto:"+INQUIRY_EMAIL+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);
+    return false;
+  }
+</script>
+</body>
+</html>

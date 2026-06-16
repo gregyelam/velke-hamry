@@ -11,3 +11,6 @@ deliverables/*airbnb-listing-mockup*
 *.docx
 internet/
 inputs/
+
+# operational logs - keep out of public repo
+logs/
