@@ -49,18 +49,18 @@
 
 <script>
 const GALLERY = [
-  { src:'assets/facade.jpg',         cs:'Černá kovová fasáda',       en:'Black metal facade' },
-  { src:'assets/terrace-hero.jpg',   cs:'Vlastní terasa',            en:'Private terrace' },
-  { src:'assets/living-2.jpg',       cs:'Obývací a jídelní prostor', en:'Living & dining' },
-  { src:'assets/bedroom-1.jpg',      cs:'Ložnice',                   en:'Bedroom' },
-  { src:'assets/firepit.jpg',        cs:'Večerní ohniště',           en:'Fire pit at dusk' },
-  { src:'assets/aerial.jpg',         cs:'Letecký pohled na areál',   en:'Aerial of the development' },
-  { src:'assets/living-1.jpg',       cs:'Obývací pokoj',             en:'Living room' },
-  { src:'assets/bath.jpg',           cs:'Koupelna',                  en:'Bathroom' },
-  { src:'assets/between.jpg',        cs:'Mezi ingoty',               en:'Between the ingots' },
-  { src:'assets/waterfall.jpg',      cs:'Vodopády v okolí',          en:'Waterfalls nearby' },
-  { src:'assets/terrace-detail.jpg', cs:'Ráno na terase',            en:'Morning on the terrace' },
-  { src:'assets/bedroom-2.jpg',      cs:'Druhá ložnice',             en:'Second bedroom' },
+  { src:'assets/facade.jpg',         w:1200,h:1600, cs:'Černá kovová fasáda',       en:'Black metal facade' },
+  { src:'assets/terrace-hero.jpg',   w:1085,h:1450, cs:'Vlastní terasa',            en:'Private terrace' },
+  { src:'assets/living-2.jpg',       w:1536,h:1024, cs:'Obývací a jídelní prostor', en:'Living & dining' },
+  { src:'assets/bedroom-1.jpg',      w:1537,h:1023, cs:'Ložnice',                   en:'Bedroom' },
+  { src:'assets/firepit.jpg',        w:1086,h:1448, cs:'Večerní ohniště',           en:'Fire pit at dusk' },
+  { src:'assets/aerial.jpg',         w:1439,h:1093, cs:'Letecký pohled na areál',   en:'Aerial of the development' },
+  { src:'assets/living-1.jpg',       w:1536,h:1024, cs:'Obývací pokoj',             en:'Living room' },
+  { src:'assets/bath.jpg',           w:3024,h:4032, cs:'Koupelna',                  en:'Bathroom' },
+  { src:'assets/between.jpg',        w:1304,h:1600, cs:'Mezi ingoty',               en:'Between the ingots' },
+  { src:'assets/waterfall.jpg',      w:1085,h:1450, cs:'Vodopády v okolí',          en:'Waterfalls nearby' },
+  { src:'assets/terrace-detail.jpg', w:1086,h:1448, cs:'Ráno na terase',            en:'Morning on the terrace' },
+  { src:'assets/bedroom-2.jpg',      w:1534,h:1025, cs:'Druhá ložnice',             en:'Second bedroom' },
 ];
 
 const FORMSPREE = 'https://formspree.io/f/xzdqyoeb';
@@ -203,7 +203,7 @@ function render(){
       <div style="columns:300px;column-gap:12px;">
         ${GALLERY.map((g,i)=>`
         <button class="galbtn" data-idx="${i}" style="break-inside:avoid;margin:0 0 12px;padding:0;border:none;background:#cfcbc1;cursor:pointer;display:block;width:100%;border-radius:3px;overflow:hidden;position:relative;">
-          <img src="${g.src}" alt="${g[lang]}" loading="lazy" style="width:100%;height:auto;display:block;" />
+          <img src="${g.src}" alt="${g[lang]}" loading="lazy" width="${g.w}" height="${g.h}" style="width:100%;height:auto;display:block;" />
         </button>`).join('')}
       </div>
     </div>
@@ -283,10 +283,11 @@ function render(){
             <input type="hidden" name="arrival" id="arrival" />
             <input type="hidden" name="departure" id="departure" />
             <div id="calendar" style="grid-column:1/-1;background:#fff;border:1px solid #c9c5bb;border-radius:3px;padding:14px 14px 10px;"></div>
+            <div id="priceBox" style="grid-column:1/-1;min-height:20px;margin-top:2px;"></div>
             <label style="display:flex;flex-direction:column;gap:6px;grid-column:1/-1;">
               <span style="${SS};font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:#7a766c;">${t.booking.f.guests}</span>
               <select name="guests" style="padding:11px 12px;border:1px solid #c9c5bb;border-radius:3px;background:#fff;font-size:15px;color:#23221F;width:100%;">
-                ${t.booking.guestOpts.map(o=>`<option value="${o.v}">${o.l}</option>`).join('')}
+                ${t.booking.guestOpts.map(o=>`<option value="${o.v}"${o.v==='2'?' selected':''}>${o.l}</option>`).join('')}
               </select>
             </label>
             <label style="display:flex;flex-direction:column;gap:6px;">
@@ -305,7 +306,6 @@ function render(){
               <span style="${SS};font-size:11px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:#7a766c;">${t.booking.f.note}</span>
               <textarea name="note" rows="3" style="padding:11px 12px;border:1px solid #c9c5bb;border-radius:3px;background:#fff;font-size:15px;color:#23221F;width:100%;resize:vertical;font-family:'Inter',sans-serif;"></textarea>
             </label>
-            <div id="priceBox" style="grid-column:1/-1;border-top:1px solid #e0dcd2;padding-top:14px;min-height:20px;"></div>
             <div style="grid-column:1/-1;display:flex;flex-direction:column;gap:12px;margin-top:2px;">
               <button type="submit" id="submitBtn" class="cta" style="background:#BF562E;color:#F1EEE7;border:none;${SS};font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:15px 26px;border-radius:3px;cursor:pointer;width:100%;">${t.booking.f.submit}</button>
               <span style="font-size:13px;line-height:1.5;color:#7a766c;">${t.booking.micro}</span>
@@ -581,6 +581,17 @@ async function handleSubmit(e){
     if(s==='cs'||s==='en') lang = s;
   }catch(e){}
   document.documentElement.lang = lang;
+  document.addEventListener('click', (e)=>{
+    const a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    if(!a) return;
+    const id = a.getAttribute('href').slice(1); if(!id) return;
+    const el = document.getElementById(id); if(!el) return;
+    e.preventDefault();
+    const mm=document.getElementById('mobilemenu'); if(mm) mm.classList.remove('open');
+    const target=()=>Math.max(0, el.getBoundingClientRect().top + window.scrollY - 70);
+    window.scrollTo({top:target(), behavior:'smooth'});
+    setTimeout(()=>{ const t=target(); if(Math.abs(window.scrollY-t)>4) window.scrollTo({top:t, behavior:'auto'}); }, 650);
+  });
   render();
   fetch('availability.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{ if(j){ if(Array.isArray(j.booked)) BOOKED=j.booked; if(j.prices) PRICEMAP=j.prices; renderCal(); recalc(); } }).catch(()=>{});
 })();
