@@ -41,6 +41,9 @@
   .cal-d.end{background:#BF562E;color:#fff;}
   .cal-nav{background:none;border:none;cursor:pointer;font-size:18px;line-height:1;color:#7a766c;padding:4px 10px;}
   .cal-nav:disabled{opacity:.3;cursor:default;}
+  #stickyCta{display:none;}
+  @media(max-width:939px){#stickyCta{display:block;}}
+  #stickyCta.hide{display:none!important;}
 </style>
 </head>
 <body>
@@ -75,7 +78,7 @@ const DICT = {
     story:{ eyebrow:'Příběh · Story', h2:'Z hamrů. Pro klid.', p1label:'Velké Hamry', p1:'Jméno Velké Hamry nese dědictví železných hamrů, které tu bušily od 13. století. Industriální stopa, ne kulisa.', p2label:'Studio Reaktor · 2023', p2:'V roce 2023 navrhlo studio Reaktor koncept „ukovaných obytných ingotů" - domy jako kovové odlitky usazené do svahu. INGOT je jeden z nich, povýšený do podoby, kterou si jeho architektura zaslouží.', diagram:'Ukovaný obytný ingot - INGOT.' },
     around:{ eyebrow:'Okolí · Around', h2:'Jizerky a Krkonoše na dosah.', cards:[ {t:'Protržená přehrada', d:'Lesní stezka podél Bílé Desné k ruinám protržené přehrady. Klidná, atmosférická, ideální dopoledne.'}, {t:'Vodopády', d:'Mumlavské vodopády a kaskády Jizery - krátké výlety za vodou a tichem.'}, {t:'Rozhledna Štěpánka', d:'Kamenná rozhledna nad lesy, panorama Jizerek i Krkonoš. Nejlepší za jasného večera.'}, {t:'Jizerka', d:'Horská osada a rašeliniště s dřevěnými chodníky. Pomalá procházka, safírový potok.'}, {t:'Kavárny a restaurace', d:'Tipy na dobrou kávu a večeři v okolí - rádi poradíme osobně.'}, {t:'Pomalé večery', d:'Vlastní terasa, ohniště pod hvězdami a klid, který jinde nenajdete.'} ] },
     avail:{ eyebrow:'Dostupnost a ceny · Availability & prices', h2:'Volné termíny v reálném čase.', perex:'Živý kalendář dostupnosti a cen přímo z rezervačního systému. Pro nejlepší cenu pošlete poptávku níže - vyřídíme ji napřímo.', caption:'Kalendář zobrazuje živá data pro tento apartmán.' },
-    booking:{ eyebrow:'Rezervace · Book direct', h2:'Rezervujte napřímo.', benefits:[ {t:'Nejlepší cena.', d:'Bez prostředníka, bez příplatků portálů.'}, {t:'Přímý kontakt.', d:'Rezervaci vyřídíme my, ne anonymní portál.'}, {t:'Flexibilita.', d:'Domluvíme příjezd, tipy na okolí i speciální přání.'} ], f:{ arrival:'Příjezd', departure:'Odjezd', guests:'Počet hostů', name:'Jméno', email:'E-mail', phone:'Telefon (nepovinné)', note:'Poznámka (nepovinné)', submit:'Odeslat poptávku', sending:'Odesílám...', ph:'vyberte v kalendáři' }, guestOpts:[ {v:'1',l:'1 host'}, {v:'2',l:'2 hosté'}, {v:'3',l:'3 hosté'} ], micro:'Nezávazná poptávka. Žádná platba teď - rezervaci vám potvrdíme e-mailem.', secondary:'Chcete rezervovat hned? Otevřít rezervační systém →', successTitle:'Díky!', successBody:'Ozveme se co nejdřív.', errorTitle:'Něco se nepovedlo.', errorBody:'Zkuste to prosím znovu, nebo nám napište na Instagram.', formTop:'Napište nám přes formulář a rádi domluvíme lepší cenu, bez provizí portálů.', price:{ from:'od', off:'sleva {n} %', elsewhere:'na portálech', inclCleaning:'vč. úklidu', pick:'Vyberte termín a uvidíte cenu.', range:'Datum odjezdu musí být po příjezdu.', unavail:'Vybrané termíny bohužel nejsou volné.', min:'Minimální pobyt jsou {n} noci.', note:'Napište nám přes formulář a rádi domluvíme ještě lepší cenu, bez provizí portálů.' } },
+    booking:{ eyebrow:'Rezervace · Book direct', h2:'Rezervujte napřímo.', benefits:[ {t:'Nejlepší cena.', d:'Bez prostředníka, bez příplatků portálů.'}, {t:'Přímý kontakt.', d:'Rezervaci vyřídíme my, ne anonymní portál.'}, {t:'Flexibilita.', d:'Domluvíme příjezd, tipy na okolí i speciální přání.'} ], f:{ arrival:'Příjezd', departure:'Odjezd', guests:'Počet hostů', name:'Jméno', email:'E-mail', phone:'Telefon (nepovinné)', note:'Poznámka (nepovinné)', submit:'Odeslat poptávku', sending:'Odesílám...', ph:'vyberte v kalendáři' }, guestOpts:[ {v:'1',l:'1 host'}, {v:'2',l:'2 hosté'}, {v:'3',l:'3 hosté'} ], micro:'Nezávazná poptávka. Žádná platba teď - rezervaci vám potvrdíme e-mailem.', quote:'Nejvíc nás nadchla terasa.', quoteBy:'Z recenze hosta', secondary:'Chcete rezervovat hned? Otevřít rezervační systém →', successTitle:'Díky!', successBody:'Ozveme se co nejdřív.', errorTitle:'Něco se nepovedlo.', errorBody:'Zkuste to prosím znovu, nebo nám napište na Instagram.', formTop:'Napište nám přes formulář a rádi domluvíme lepší cenu, bez provizí portálů.', price:{ from:'od', off:'sleva {n} %', elsewhere:'na portálech', inclCleaning:'vč. úklidu', legend:'Šedě označené dny jsou už obsazené.', filling:'Nejbližší týdny se plní.', pick:'Vyberte termín a uvidíte cenu.', range:'Datum odjezdu musí být po příjezdu.', unavail:'Vybrané termíny bohužel nejsou volné.', min:'Minimální pobyt jsou {n} noci.', note:'Napište nám přes formulář a rádi domluvíme ještě lepší cenu, bez provizí portálů.' } },
     about:{ eyebrow:'O nás · About us', h2:'Dva kamarádi, jedno místo.', intro:'Jsme dva kamarádi. INGOT jsme si postavili pro sebe - na volné dny, klid a čas s blízkými. Spojují nás běžky, kolo a hory; tady to máme všechno za dveřmi. A protože sami hodně cestujeme, rádi tohle místo otevřeme i vám.', o1name:'Martin Smékal', o1role:'Filmový režisér', o1line:'', o2name:'Martin Gregor', o2role:'Staví digitální produkty', o2line:'' },
     footer:{ tagline:'Inspirováno Severem. Ukováno v Jizerkách.', location:'Velké Hamry, Jizerské hory', rights:'Rezervujete přímo u nás, bez prostředníka. © 2026 INGOT', insta:'@ingot_hamry' },
   },
@@ -88,7 +91,7 @@ const DICT = {
     story:{ eyebrow:'Story · Příběh', h2:'From the forges. For the quiet.', p1label:'Velké Hamry', p1:'The name Velké Hamry carries the heritage of the iron forges that rang here from the 13th century. An industrial trace, not a backdrop.', p2label:'Studio Reaktor · 2023', p2:"In 2023 Studio Reaktor designed the concept of 'forged living ingots' - houses like metal castings set into the slope. INGOT is one of them, raised to the form its architecture deserves.", diagram:'A forged living ingot - INGOT.' },
     around:{ eyebrow:'Around · Okolí', h2:'The Jizera and Giant Mountains, within reach.', cards:[ {t:'The burst dam', d:'A forest trail along the Bílá Desná to the ruins of the burst dam. Calm, atmospheric, a perfect morning.'}, {t:'Waterfalls', d:'The Mumlava waterfalls and the Jizera cascades - short walks to water and quiet.'}, {t:'Štěpánka lookout', d:'A stone lookout tower above the forests, panoramas of both ranges. Best on a clear evening.'}, {t:'Jizerka', d:'A mountain hamlet and peat bog with wooden boardwalks. A slow walk, a sapphire creek.'}, {t:'Cafés & dining', d:'Where to find good coffee and dinner nearby - we are happy to point the way.'}, {t:'Slow evenings', d:"Your own terrace, a fire pit under the stars and a quiet you won't find elsewhere."} ] },
     avail:{ eyebrow:'Availability & prices · Dostupnost', h2:'Live availability.', perex:'A live availability and price calendar straight from the booking system. For the best price, send an enquiry below - we handle it directly.', caption:'Live data for this apartment.' },
-    booking:{ eyebrow:'Book direct · Rezervace', h2:'Book direct.', benefits:[ {t:'Best price.', d:'No middleman, no platform fees.'}, {t:'Direct contact.', d:'We handle your booking, not an anonymous portal.'}, {t:'Flexibility.', d:"We'll arrange arrival, local tips and special requests."} ], f:{ arrival:'Arrival', departure:'Departure', guests:'Guests', name:'Name', email:'E-mail', phone:'Phone (optional)', note:'Note (optional)', submit:'Send enquiry', sending:'Sending...', ph:'pick in the calendar' }, guestOpts:[ {v:'1',l:'1 guest'}, {v:'2',l:'2 guests'}, {v:'3',l:'3 guests'} ], micro:'No-obligation enquiry. No payment now - we confirm your booking by e-mail.', secondary:'Prefer to book instantly? Open the booking system →', successTitle:'Thank you!', successBody:"We'll be in touch shortly.", errorTitle:'Something went wrong.', errorBody:'Please try again, or message us on Instagram.', formTop:'Message us through the form and we will gladly arrange a better price, with no platform fees.', price:{ from:'from', off:'{n}% off', elsewhere:'on the portals', inclCleaning:'incl. cleaning', pick:'Pick your dates to see the price.', range:'Check-out must be after check-in.', unavail:'Those dates are not available.', min:'Minimum stay is {n} nights.', note:'Message us through the form and we will gladly arrange an even better price, with no platform fees.' } },
+    booking:{ eyebrow:'Book direct · Rezervace', h2:'Book direct.', benefits:[ {t:'Best price.', d:'No middleman, no platform fees.'}, {t:'Direct contact.', d:'We handle your booking, not an anonymous portal.'}, {t:'Flexibility.', d:"We'll arrange arrival, local tips and special requests."} ], f:{ arrival:'Arrival', departure:'Departure', guests:'Guests', name:'Name', email:'E-mail', phone:'Phone (optional)', note:'Note (optional)', submit:'Send enquiry', sending:'Sending...', ph:'pick in the calendar' }, guestOpts:[ {v:'1',l:'1 guest'}, {v:'2',l:'2 guests'}, {v:'3',l:'3 guests'} ], micro:'No-obligation enquiry. No payment now - we confirm your booking by e-mail.', quote:'The terrace was our favourite part.', quoteBy:'Guest review', secondary:'Prefer to book instantly? Open the booking system →', successTitle:'Thank you!', successBody:"We'll be in touch shortly.", errorTitle:'Something went wrong.', errorBody:'Please try again, or message us on Instagram.', formTop:'Message us through the form and we will gladly arrange a better price, with no platform fees.', price:{ from:'from', off:'{n}% off', elsewhere:'on the portals', inclCleaning:'incl. cleaning', legend:'Greyed-out days are already booked.', filling:'The coming weeks are filling up.', pick:'Pick your dates to see the price.', range:'Check-out must be after check-in.', unavail:'Those dates are not available.', min:'Minimum stay is {n} nights.', note:'Message us through the form and we will gladly arrange an even better price, with no platform fees.' } },
     about:{ eyebrow:'About us · O nás', h2:'Two friends, one place.', intro:"We're two friends. We built INGOT for ourselves - for days off, quiet and time with the people we love. Cross-country skiing, cycling and the mountains are our shared thing, and here it's all right outside the door. And because we travel a lot ourselves, we're glad to open this place up to you too.", o1name:'Martin Smékal', o1role:'Film Director', o1line:'', o2name:'Martin Gregor', o2role:'Builds digital products', o2line:'' },
     footer:{ tagline:'Inspired by the North. Forged in the Jizera Mountains.', location:'Velké Hamry, Jizera Mountains', rights:'Book directly with us, no middleman. © 2026 INGOT', insta:'@ingot_hamry' },
   }
@@ -99,6 +102,7 @@ let lbIndex = null;
 const app = document.getElementById('app');
 const lbEl = document.getElementById('lb');
 let io = null;
+let so = null;
 
 function previoSrc(){ return 'https://booking.previo.cz/occupancy/?hotId=789961&currency=CZK&lang='+(lang==='en'?'en':'cs')+'&showRoomType=995241&redirectType=iframe'; }
 function previoBook(){ return 'https://booking.previo.cz/?hotId=789961&currency=CZK&lang='+(lang==='en'?'en':'cs')+'&roomType=995241'; }
@@ -265,6 +269,10 @@ function render(){
             <svg width="22" height="22" viewBox="0 0 22 22" style="flex:none;margin-top:2px;"><circle cx="11" cy="11" r="10.5" fill="none" stroke="#BF562E" stroke-width="1.2"/><path d="M6.5 11.2 L9.5 14.2 L15.5 7.5" fill="none" stroke="#BF562E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <p style="margin:0;font-size:16px;line-height:1.55;"><span style="font-weight:600;color:#F1EEE7;">${b.t}</span> <span style="color:#bdb9af;">${b.d}</span></p>
           </div>`).join('')}
+          <div style="border-left:2px solid #BF562E;padding-left:16px;margin-top:6px;">
+            <p style="${SS};font-size:17px;line-height:1.5;font-style:italic;color:#F1EEE7;margin:0;">${t.booking.quote}</p>
+            <span style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#9a968c;margin-top:8px;display:inline-block;">${t.booking.quoteBy}</span>
+          </div>
         </div>
         <div data-reveal id="formWrap" style="background:#F1EEE7;border-radius:4px;padding:clamp(24px,3vw,38px);">
           <p style="font-size:14px;line-height:1.55;color:#9a6b4d;margin:0 0 18px;padding-bottom:16px;border-bottom:1px solid #e7e3d9;">${t.booking.formTop}</p>
@@ -350,7 +358,8 @@ function render(){
     <div style="max-width:1180px;margin:clamp(40px,5vw,64px) auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.1);">
       <span style="font-size:13px;color:#888479;">${t.footer.rights}</span>
     </div>
-  </footer>`;
+  </footer>
+  <a href="#rezervace" id="stickyCta" class="cta" style="position:fixed;left:12px;right:12px;bottom:12px;z-index:55;text-align:center;background:#BF562E;color:#F1EEE7;${SS};font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:15px;border-radius:4px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.28);">${t.nav.cta}</a>`;
 
   attach();
   initReveal();
@@ -363,6 +372,9 @@ function attach(){
   if(burger && menu){ burger.addEventListener('click', ()=> menu.classList.toggle('open')); }
   app.querySelectorAll('.mm-link').forEach(a=> a.addEventListener('click', ()=> menu && menu.classList.remove('open')));
   app.querySelectorAll('.galbtn').forEach(b=> b.addEventListener('click', ()=> openLb(parseInt(b.getAttribute('data-idx'),10))));
+  if(so) window.removeEventListener('scroll', so);
+  const sticky=document.getElementById('stickyCta'), rezSec=document.getElementById('rezervace');
+  if(sticky && rezSec){ so=()=>{ const r=rezSec.getBoundingClientRect(); sticky.classList.toggle('hide', r.top < window.innerHeight*0.6); }; window.addEventListener('scroll', so, {passive:true}); so(); }
   const form = document.getElementById('enquiry');
   if(form){
     form.addEventListener('submit', handleSubmit);
@@ -511,6 +523,9 @@ function renderCal(){
   }
   const cf=new Date(); const curFirst=new Date(cf.getFullYear(),cf.getMonth(),1);
   const prevDisabled = calBase<=curFirst;
+  let booked60=0; for(let i=0;i<60;i++){ const dt=new Date(today.getTime()+i*86400000); if(BOOKED.indexOf(isoDate(dt))!==-1) booked60++; }
+  const pr=DICT[lang].booking.price;
+  const scar = booked60>0 ? ((booked60>=18?'<strong style="color:#BF562E;font-weight:600;">'+pr.filling+'</strong> ':'')+pr.legend) : '';
   cont.innerHTML=
     '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">'+
       '<button type="button" class="cal-nav" id="calPrev"'+(prevDisabled?' disabled':'')+'>&#8249;</button>'+
@@ -518,7 +533,8 @@ function renderCal(){
       '<button type="button" class="cal-nav" id="calNext">&#8250;</button>'+
     '</div>'+
     '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px;">'+wds.map(w=>'<div style="text-align:center;font-size:11px;color:#9a958b;'+SS+';">'+w+'</div>').join('')+'</div>'+
-    '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">'+cells+'</div>';
+    '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">'+cells+'</div>'+
+    (scar?'<div style="font-size:11.5px;line-height:1.5;color:#9a958b;margin-top:9px;">'+scar+'</div>':'');
   cont.querySelectorAll('.cal-d.avail').forEach(el=>el.addEventListener('click',()=>pickDay(el.getAttribute('data-iso'))));
   const pv=document.getElementById('calPrev'), nx=document.getElementById('calNext');
   if(pv&&!prevDisabled) pv.addEventListener('click',()=>{calBase=new Date(y,m-1,1);renderCal();});
