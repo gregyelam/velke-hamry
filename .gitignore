@@ -14,3 +14,9 @@ inputs/
 
 # operational logs - keep out of public repo
 logs/
+
+# planning docs - keep out of public repo
+docs/plans/
+
+# local Worker dev secrets
+.dev.vars

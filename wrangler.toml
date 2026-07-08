@@ -1,7 +1,8 @@
-# Cloudflare Workers - static asset hosting for the INGOT site.
-# Serves the contents of ./site as a static website (no server code).
+# Cloudflare Worker - serves ./site as static assets and handles the booking form.
 name = "velke-hamry"
+main = "worker/index.mjs"
 compatibility_date = "2026-06-15"
 
 [assets]
 directory = "./site"
+binding = "ASSETS"
