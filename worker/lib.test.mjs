@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { isSpam, validate } from "./lib.mjs";
+import { isSpam, validate, ownerEmail, guestEmail, escapeHtml } from "./lib.mjs";
 
 test("isSpam true when honeypot filled", () => {
   assert.equal(isSpam({ _gotcha: "bot" }), true);
@@ -29,4 +29,32 @@ test("validate fails on missing dates", () => {
   assert.equal(r.ok, false);
   assert.ok(r.errors.includes("arrival"));
   assert.ok(r.errors.includes("departure"));
+});
+
+const F = { name: "Jan Novak", email: "jan@example.com", arrival: "2026-08-01", departure: "2026-08-03", guests: "2", phone: "+420 111", note: "Pozdni prijezd", _language: "cs" };
+
+test("escapeHtml neutralizes angle brackets", () => {
+  assert.equal(escapeHtml("<b>&"), "&lt;b&gt;&amp;");
+});
+test("ownerEmail replyTo is guest email and body has fields", () => {
+  const m = ownerEmail(F);
+  assert.equal(m.replyTo, "jan@example.com");
+  assert.ok(m.subject.includes("Jan Novak"));
+  assert.ok(m.text.includes("2026-08-01"));
+  assert.ok(m.text.includes("Pozdni prijezd"));
+});
+test("guestEmail cs by default, contains dates + acknowledgement", () => {
+  const m = guestEmail(F);
+  assert.ok(m.html.includes("2026-08-01"));
+  assert.ok(m.html.includes("2026-08-03"));
+  assert.ok(/Děkujeme/.test(m.html));
+  assert.ok(m.text.length > 0);
+});
+test("guestEmail switches to en", () => {
+  const m = guestEmail({ ...F, _language: "en" });
+  assert.ok(/Thank you/.test(m.html));
+});
+test("guestEmail escapes hostile name", () => {
+  const m = guestEmail({ ...F, name: "<script>" });
+  assert.ok(!m.html.includes("<script>"));
 });
