@@ -90,7 +90,7 @@ const GALLERY = [
   { src:'assets/bedroom-2.jpg',      w:1534,h:1025, cs:'Druhá ložnice',             en:'Second bedroom' },
 ];
 
-const FORMSPREE = 'https://formspree.io/f/xzdqyoeb';
+const ENQUIRY_ENDPOINT = '/api/enquiry';
 
 const DICT = {
   cs: {
@@ -592,7 +592,7 @@ async function handleSubmit(e){
   if(btn){ btn.disabled = true; btn.textContent = t.booking.f.sending; btn.style.opacity = '.7'; btn.style.cursor='default'; }
   let ok = false;
   try{
-    const res = await fetch(FORMSPREE, { method:'POST', body:data, headers:{ 'Accept':'application/json' } });
+    const res = await fetch(ENQUIRY_ENDPOINT, { method:'POST', body:data, headers:{ 'Accept':'application/json' } });
     ok = res.ok;
   }catch(err){ ok = false; }
   const wrap = document.getElementById('formWrap');
