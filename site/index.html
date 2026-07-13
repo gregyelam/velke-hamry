@@ -469,8 +469,8 @@ window.addEventListener('keydown', (e)=>{
 });
 
 /* ---- pricing: direct price = Previo price minus the agency fee; live data from availability.json ---- */
-const OUR_DISCOUNT = 0.05;   // our direct price = the scraped Muhu/direct price minus this (a little cheaper than Muhu). Tune.
-const PORTAL_FEE   = 0.15;   // "na portálech" = Muhu price + what Booking/Airbnb add on top (their cut). Tune.
+const OUR_DISCOUNT = 0.03;   // our direct price = the scraped Muhu/direct price minus this (a little cheaper than Muhu). Tune.
+const PORTAL_FEE   = 0.18;   // "na portálech" = Muhu price + what Booking/Airbnb add on top (their cut). Tune.
 const FALLBACK_NIGHT = 1800; // used only when a night has no scraped Previo price
 const MIN_NIGHTS = 2;
 let BOOKED = [];             // ['YYYY-MM-DD'] booked nights (from the 4-hourly Previo scrape)
