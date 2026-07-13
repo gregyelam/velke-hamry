@@ -20,3 +20,6 @@ docs/plans/
 
 # local Worker dev secrets
 .dev.vars
+
+# Wrangler build/deploy state
+.wrangler/
