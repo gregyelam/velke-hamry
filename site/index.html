@@ -469,9 +469,8 @@ window.addEventListener('keydown', (e)=>{
 });
 
 /* ---- pricing: direct price = Previo price minus the agency fee; live data from availability.json ---- */
-const DISCOUNT = 0.12;       // how much cheaper than Previo (we skip the agency fee). Tune this one number.
-const CLEAN_BASE = 0;        // cleaning already baked into the Previo/portal price - do NOT add again
-const CLEAN_PP = 0;          // (kept as knobs in case a future rate excludes cleaning)
+const OUR_DISCOUNT = 0.05;   // our direct price = the scraped Muhu/direct price minus this (a little cheaper than Muhu). Tune.
+const PORTAL_FEE   = 0.15;   // "na portálech" = Muhu price + what Booking/Airbnb add on top (their cut). Tune.
 const FALLBACK_NIGHT = 1800; // used only when a night has no scraped Previo price
 const MIN_NIGHTS = 2;
 let BOOKED = [];             // ['YYYY-MM-DD'] booked nights (from the 4-hourly Previo scrape)
@@ -488,16 +487,15 @@ function recalc(){
   const start = new Date(a+'T00:00:00'), end = new Date(d+'T00:00:00');
   const nights = Math.round((end-start)/86400000);
   if(isNaN(nights) || nights<=0){ box.innerHTML = `<span style="color:#BF562E;font-size:13px;">${p.range}</span>`; return; }
-  let previoNights=0, ourNights=0, allPriced=true;
+  let base=0, allPriced=true;   // base = scraped Muhu/direct price for the whole stay
   for(let i=0;i<nights;i++){
     const dt=new Date(start); dt.setDate(dt.getDate()+i); const key=isoDate(dt);
     if(BOOKED.indexOf(key)!==-1){ box.innerHTML = `<span style="color:#BF562E;font-size:13px;">${p.unavail}</span>`; return; }
     let pv = PRICEMAP[key]; if(pv==null){ allPriced=false; pv=FALLBACK_NIGHT; }
-    previoNights += pv; ourNights += Math.round(pv*(1-DISCOUNT));
+    base += pv;
   }
-  const guests = form.guests ? (parseInt(form.guests.value,10)||1) : 1;
-  const cleaning = CLEAN_BASE + CLEAN_PP*guests;
-  const ourTotal = ourNights + cleaning, previoTotal = previoNights + cleaning;
+  const ourTotal = Math.round(base*(1-OUR_DISCOUNT));   // a little cheaper than Muhu
+  const previoTotal = Math.round(base*(1+PORTAL_FEE));  // "na portálech" = Muhu + what the OTAs add on top
   const pct = Math.round((1 - ourTotal/previoTotal)*100);
   const showDeal = allPriced && pct>=1;
   const minNote = nights<MIN_NIGHTS ? `<div style="color:#BF562E;font-size:12.5px;margin-top:6px;">${p.min.replace('{n}',MIN_NIGHTS)}</div>` : '';
