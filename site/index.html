@@ -470,8 +470,8 @@ window.addEventListener('keydown', (e)=>{
 
 /* ---- pricing: direct price = Previo price minus the agency fee; live data from availability.json ---- */
 const DISCOUNT = 0.12;       // how much cheaper than Previo (we skip the agency fee). Tune this one number.
-const CLEAN_BASE = 600;      // cleaning: base
-const CLEAN_PP = 150;        // cleaning: per guest
+const CLEAN_BASE = 0;        // cleaning already baked into the Previo/portal price - do NOT add again
+const CLEAN_PP = 0;          // (kept as knobs in case a future rate excludes cleaning)
 const FALLBACK_NIGHT = 1800; // used only when a night has no scraped Previo price
 const MIN_NIGHTS = 2;
 let BOOKED = [];             // ['YYYY-MM-DD'] booked nights (from the 4-hourly Previo scrape)
