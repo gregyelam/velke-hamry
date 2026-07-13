@@ -54,25 +54,27 @@ export function guestEmail(fields) {
   const name = escapeHtml(fields.name);
   const t = en
     ? {
-        subject: "INGOT - we received your enquiry",
+        subject: "INGOT - thank you for your enquiry",
         h: "Thank you for your enquiry",
-        greet: "Dear",
-        intro: "We have registered your interest in a stay at the INGOT apartment:",
-        ack: "This is an automatic confirmation that your enquiry reached us. We will get back to you shortly with availability and the best price directly, with no platform fees.",
-        reply: "If you have any extra requests, just reply to this e-mail.",
+        greet: "Hi",
+        intro: "we're so glad INGOT caught your eye. Here's a quick summary of what you sent us:",
+        ack: "We'll personally get back to you very soon - we'll confirm the dates are free and send you our best price directly. Usually within 24 hours.",
+        reply: "If you need anything or have a special request, just reply to this e-mail. We're always happy to help.",
+        sign: "We look forward to welcoming you to the mountains!",
         labels: { arr: "Arrival", dep: "Departure", g: "Guests" },
       }
     : {
-        subject: "INGOT - vaše poptávka dorazila",
+        subject: "INGOT - děkujeme za vaši poptávku",
         h: "Děkujeme za vaši poptávku",
-        greet: "Dobrý den",
-        intro: "Zaznamenali jsme zájem o pobyt v apartmánu INGOT:",
-        ack: "Toto je automatické potvrzení, že nám vaše poptávka dorazila. Ozveme se vám co nejdřív s potvrzením dostupnosti a nejlepší cenou napřímo, bez provizí portálů.",
-        reply: "Pokud máte doplňující přání, stačí odpovědět na tento e-mail.",
+        greet: "Dobrý den,",
+        intro: "moc nás těší váš zájem o pobyt v apartmánu INGOT. Tady je shrnutí toho, co jste nám poslali:",
+        ack: "Ozveme se vám co nejdříve osobně - potvrdíme, že je termín volný, a pošleme vám cenu napřímo. Většinou to stihneme do 24 hodin.",
+        reply: "Kdybyste cokoli potřebovali nebo měli zvláštní přání, klidně nám odpovězte na tento e-mail. Rádi pomůžeme.",
+        sign: "Těšíme se na vás v Jizerkách!",
         labels: { arr: "Příjezd", dep: "Odjezd", g: "Hostů" },
       };
   const greetLine = `${t.greet} ${name},`;
-  const text = `${t.h}\n\n${t.intro}\n${t.labels.arr}: ${fields.arrival}\n${t.labels.dep}: ${fields.departure}\n${t.labels.g}: ${fields.guests || "?"}\n\n${t.ack}\n\n${t.reply}\n\n- INGOT · Velké Hamry, Jizerské hory`;
+  const text = `${t.h}\n\n${greetLine}\n\n${t.intro}\n${t.labels.arr}: ${fields.arrival}\n${t.labels.dep}: ${fields.departure}\n${t.labels.g}: ${fields.guests || "?"}\n\n${t.ack}\n\n${t.reply}\n\n${t.sign}\n\n- INGOT · Velké Hamry, Jizerské hory`;
   const html = `<div style="background:${BRAND.bg};padding:28px;font-family:Arial,Helvetica,sans-serif;color:${BRAND.ink};">
   <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:6px;overflow:hidden;border:1px solid #e7e3d9;">
     <div style="background:${BRAND.dark};color:${BRAND.bg};padding:22px 28px;letter-spacing:.18em;font-weight:700;">INGOT</div>
@@ -87,6 +89,7 @@ export function guestEmail(fields) {
       </table>
       <p style="margin:0 0 12px;line-height:1.6;">${t.ack}</p>
       <p style="margin:0 0 20px;line-height:1.6;">${t.reply}</p>
+      <p style="margin:0 0 24px;line-height:1.6;font-weight:600;color:${BRAND.ink};">${t.sign}</p>
       <p style="margin:0;color:#7a766c;font-size:13px;border-top:1px solid #e7e3d9;padding-top:16px;">INGOT · Velké Hamry, Jizerské hory · <a href="https://ingot-hamry.cz" style="color:${BRAND.accent};">ingot-hamry.cz</a></p>
     </div>
   </div>
